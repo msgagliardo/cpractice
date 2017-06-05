@@ -3,6 +3,7 @@
 *.doc
 *.odt
 *.pdf
+*.docx
 
 # packages #
 ############
