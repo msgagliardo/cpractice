@@ -1,0 +1,36 @@
+# ignore all document files #
+#############################
+*.doc
+*.odt
+*.pdf
+
+# packages #
+############
+*.7z
+*.dmg
+*.gz
+*.iso
+*.rar
+*.tar
+*.zip
+
+# logs and databases #
+######################
+*.log
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Specific directories #
+########################
+chapterExamples/
+bin/
+test/
+9780321928429_CPrimerPlus6E_code/
