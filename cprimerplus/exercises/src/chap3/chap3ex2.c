@@ -1,3 +1,4 @@
+/* A program for determining a character from a user entered ASCII code */
 #include <stdio.h>
 #include <stdlib.h>
 #include <inttypes.h>
