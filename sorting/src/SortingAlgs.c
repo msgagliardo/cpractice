@@ -28,10 +28,18 @@ void insertionSort(int data[], int first, int n) {
 }
 void merge(int data[], int first, int n1, int n2) {
 
+    /* This would be considered a variable length array which is a C99 
+     * feature and is not ANSI C compliant (pretty sure ANSI C requires
+     * the size of stack dynamic arrays to be integer literal or manifest
+     * constants). The easiest way to modify this code to be ANSI C 
+     * compliant if you still want to keep the same function header is to
+     * declare temp to be an integer pointer to heap allocated memory like
+     * so, int *temp = (int *) malloc(sizeof(int) * (n1 + n2));.  The other
+     * alternative is to modify the merge function (see the algorithms pdf
+     * on Google Drive in the "sync" folder).
+     */
     int temp[n1 + n2];
-    int copied = 0;
-    int copied1 = 0;
-    int copied2 = 0;
+    int copied = 0, copied1 = 0, copied2 = 0;
     int i;
 
     while (copied1 < n1 && copied2 < n2) {
@@ -59,3 +67,41 @@ void mergeSort(int data[], int first, int n) {
         merge(data, first, n1, n2);
     }
 }
+int partition(int data[], int first, int n) {
+
+    int pivot = data[first];
+    int low = first + 1;
+    int high = first + n - 1;
+    int temp;
+
+    while (high > low) {
+        while (low < n && data[low] <= pivot)
+            low++;
+        while (high >= first && data[high] > pivot)
+            high--;
+
+        if (high > low) {
+            temp = data[low];
+            data[low] = data[high];
+            data[high] = temp;
+            low++;
+            high--;
+        }
+    }
+    if (data[high] < pivot) {
+        data[first] = data[high];
+        data[high] = pivot;
+    }
+    return high;
+}
+void quickSort(int data[], int first, int n) {
+
+    if (n > 1) {
+        int pivotIndex = partition(data, first, n);
+        int n1 = pivotIndex - first;
+        int n2 = n - n1 - 1;
+        quickSort(data, first, n1);
+        quickSort(data, pivotIndex + 1, n2);
+    }
+} 
+
