@@ -75,7 +75,7 @@ int partition(int data[], int first, int n) {
     int temp;
 
     while (high > low) {
-        while (low < n && data[low] <= pivot)
+        while (low < first + n && data[low] <= pivot)
             low++;
         while (high >= first && data[high] > pivot)
             high--;
