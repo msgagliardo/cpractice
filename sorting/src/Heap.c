@@ -20,7 +20,7 @@ void insert(int A[], int x, int* size) {
 }
 void bubbleDown(int A[], int i, int lastI) {
     int child, temp;
-    child = 2*i + 1;
+    child = 2 * i + 1;
     if (child < lastI && A[child + 1] > A[child])
         child++;
     if (child <= lastI && A[i] < A[child]) {
@@ -55,7 +55,7 @@ int main(void) {
     n = 0;
     // EOF is equal to a negative number, usually -1 (it is on this Mac)
     // to cause scanf to return EOF when reading from
-    // stdin, use ctrl-d on Unix, and ctrl-z on Windows
+    // stdin, use Ctrl+D on Unix, and Ctrl+Z on Windows
     while (n < MAX && scanf("%d", &x) != -1)
         A[n++] = x;
     heapSort(A, n);
