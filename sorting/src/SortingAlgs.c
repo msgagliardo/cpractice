@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "SortingAlgs.h"
 
 void selectionSort(int data[], int first, int n) {
 
@@ -104,4 +105,50 @@ void quickSort(int data[], int first, int n) {
         quickSort(data, pivotIndex + 1, n2);
     }
 } 
+/* the split function is needed when you are using a linked list because 
+ * we cannot do the splitting inside the mergeSort function simply by 
+ * passing the size as an argument and dividing it by 2.  This is because 
+ * we cannot index into a linked list like we can an array.
+ */
+INT_NODE *split(INT_NODE *pList) {
 
+    INT_NODE *pList2;
+
+    if (NULL == pList)
+        return NULL;
+    else if (NULL == pList->next)
+        return NULL;
+    else {
+        pList2 = pList->next;
+        pList->next = pList2->next;
+        pList2->next = split(pList2->next);
+        return pList2;
+    }
+}
+INT_NODE *linkedMerge(INT_NODE *pList, INT_NODE *pList2) {
+    
+    if (NULL == pList)
+        return pList2;
+    else if (NULL == pList2)
+        return pList;
+    else if (pList->element <= pList2->element) {
+        pList->next = linkedMerge(pList->next, pList2);
+        return pList;
+    } else {
+        pList2->next = linkedMerge(pList, pList2->next);
+        return pList2;
+    }
+} 
+INT_NODE *linkedMergeSort(INT_NODE *pList) {
+    
+    INT_NODE *pList2;
+
+    if (NULL == pList)
+        return NULL;
+    else if (NULL == pList->next)
+        return pList;
+    else {
+        pList2 = split(pList);
+        return linkedMerge(linkedMergeSort(pList), linkedMergeSort(pList2));
+    } 
+} 
