@@ -1,8 +1,5 @@
-/* This program prompts the user to enter three sets of five double 
- * numbers each.  The program then uses separate functions to compute the
- * average of each set, compute the average of all the values, and 
- * determine the largest value of all 15 numbers entered.  The main 
- * function then displays the results.
+/* This program is just like chap10ex13.c except that it uses VLA function
+ * parameters.
  */
 #include <float.h>
 #include <stdio.h>
