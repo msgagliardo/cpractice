@@ -35,6 +35,7 @@ int main(void) {
     INT_NODE *myList = makeList();
     INT_NODE *myNewList = NULL;
    
+    int test[14] = {35, 11, 4, 79, 43, 19, 22, 51, 2, 11, 87, 14, 29, 61};
     for (cursor = myList; cursor != NULL; cursor = cursor->next) 
         printf("%d%s", cursor->element,
                         (NULL == cursor->next) ? "\n": "  ");
@@ -55,5 +56,13 @@ int main(void) {
         printf("%d%s", cursor->element,
                         (NULL == cursor->next) ? "\n": "  ");
 
+    int i;
+    for (i = 0; i < 14; i++)
+        printf("%d  ", test[i]);
+    printf("\n");
+    heapSort(test, 14);
+    for (i = 0; i < 14; i++)
+        printf("%d  ", test[i]);
+    printf("\n");
     return 0;
 }
