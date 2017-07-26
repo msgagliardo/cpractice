@@ -60,7 +60,7 @@ int main(void) {
     for (i = 0; i < 14; i++)
         printf("%d  ", test[i]);
     printf("\n");
-    heapSort(test, 14);
+    heapSort2(test, 14);
     for (i = 0; i < 14; i++)
         printf("%d  ", test[i]);
     printf("\n");
