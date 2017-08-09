@@ -101,3 +101,26 @@ void heapSort2(int A[], int size) {
         }
     }
 }
+int main(void) {
+    /*int i, n, x;
+    n = 0;
+    // EOF is equal to a negative number, usually -1 (it is on this Mac)
+    // to cause scanf to return EOF when reading from
+    // stdin, use Ctrl+D on Unix, and Ctrl+Z on Windows
+    while (n < MAX && scanf("%d", &x) != EOF)
+        A[n++] = x;
+    heapSort(A, n);
+    for(i = 0; i < n; i++)
+        printf("%d ", A[i]);
+    printf("\n");
+    */
+    int i;
+    int test[14] = {35, 11, 4, 79, 43, 19, 22, 51, 2, 11, 87, 14, 29, 61};
+    heapSort2(test, 14);
+    for (i = 0; i < 14; i++)
+        printf("%d  ", test[i]);
+    printf("\n");
+
+    return 0;
+}
+
