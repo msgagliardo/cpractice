@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "SortingAlgs.h"
 
+extern int testNumber;
+
 INT_NODE* makeList(void) {
     int num;
     INT_NODE *pHead = NULL, *pCurrentNode = NULL;
@@ -31,6 +33,7 @@ INT_NODE* makeList(void) {
     return pHead;
 }
 int main(void) {
+    printf("The external variable 'testNumber' = %d\n", testNumber);
     INT_NODE *cursor = NULL;
     INT_NODE *myList = makeList();
     INT_NODE *myNewList = NULL;
@@ -64,5 +67,6 @@ int main(void) {
     for (i = 0; i < 14; i++)
         printf("%d  ", test[i]);
     printf("\n");
+
     return 0;
 }
