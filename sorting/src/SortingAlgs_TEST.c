@@ -1,9 +1,32 @@
 /* A file for testing the algorithms developed in SortingAlgs.c. */
 #include <stdio.h>
 #include <stdlib.h>
-#include "SortingAlgs.h"
+/* If you don't include the SortingAlgs.h header file, then you need to 
+ * directly declare the INT_NODE type in this file because it is used in
+ * the 'makeList' function.
+ *
+ * These headers are not just here for documentation purposes.  If you 
+ * leave off these headers and try to compile and link the SortingAlgs.c,
+ * heap.c, and SortingAlgs_TEST.c files using only the C standard library
+ * headers, you will get the following warning on this 2015 MacBook Pro;
+ *
+ * SortingAlgs_TEST.c:51:17: warning: implicit declaration of function
+ * 'linkedMergeSort' is invalid in C99 [-Wimplicit-function-declaration]
+ *      myNewList = linkedMergeSort(myList);
+ * 
+ * Due to trying to use the 'linkedMergeSort' function in this file prior
+ * to it first being declared.  This raises the question, why does the 
+ * compiler require that you prototype this function in a header file
+ * if it is already declared and defined in one of the other source (.c)
+ * files that you are compiling and linking?
+ */
+//#include "SortingAlgs.h"
 
-extern int testNumber;
+typedef struct INT_NODE {
+    int element;
+    struct INT_NODE *next;
+} INT_NODE;
+
 
 INT_NODE* makeList(void) {
     int num;

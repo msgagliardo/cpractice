@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "SortingAlgs.h"
+/* If you do not include the SortingAlgs.h header file, then you have to 
+ * place the INT_NODE type directly in this file because the linked list
+ * mergesort functions use this type.
+ */
+//#include "SortingAlgs.h"
+
+typedef struct INT_NODE {
+    int element;
+    struct INT_NODE *next;
+} INT_NODE;
 
 void selectionSort(int data[], int first, int n) {
 

@@ -3,6 +3,23 @@
 
 #define MAX 100
 
+/* This is a static variable with external linkage, sometimes referred to 
+ * as an external variable.  An external variable has file scope, external
+ * linkage (it can be used in other translation units), and static storage
+ * duration by default.  
+ *
+ * You create an external variable by placing a DEFINING declaration 
+ * outside of any function. As a matter of documentation, an external 
+ * variable can additionally be declared inside a function that uses it by 
+ * using the extern keyword. If a particular external variable is defined 
+ * in one source code file (.c) and is used in a second source code file, 
+ * (.c) declaring the variable in the second file with extern is mandatory. 
+ * If you declare this extern variable in the second file outside of any
+ * functions, it will have file scope, whereas if you declare it inside 
+ * a function, it will have block scope.
+ *
+ *
+ */
 int testNumber = 554455;
 int A[MAX + 1];
 
