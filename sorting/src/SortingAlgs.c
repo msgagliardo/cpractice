@@ -1,15 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-/* If you do not include the SortingAlgs.h header file, then you have to 
- * place the INT_NODE type directly in this file because the linked list
- * mergesort functions use this type.
- */
-//#include "SortingAlgs.h"
+#include "SortingAlgs.h"
 
-typedef struct INT_NODE {
-    int element;
-    struct INT_NODE *next;
-} INT_NODE;
 
 void selectionSort(int data[], int first, int n) {
 
@@ -26,6 +18,7 @@ void selectionSort(int data[], int first, int n) {
         data[i] = temp;
     }
 }
+
 void insertionSort(int data[], int first, int n) {
 
     int i, j, entry;
@@ -36,18 +29,9 @@ void insertionSort(int data[], int first, int n) {
         data[j] = entry;
     }
 }
+
 void merge(int data[], int first, int n1, int n2) {
 
-    /* This would be considered a variable length array which is a C99 
-     * feature and is not ANSI C compliant (pretty sure ANSI C requires
-     * the size of stack dynamic arrays to be integer literal or manifest
-     * constants). The easiest way to modify this code to be ANSI C 
-     * compliant if you still want to keep the same function header is to
-     * declare temp to be an integer pointer to heap allocated memory like
-     * so, int *temp = (int *) malloc(sizeof(int) * (n1 + n2));.  The other
-     * alternative is to modify the merge function (see the algorithms pdf
-     * on Google Drive in the "sync" folder).
-     */
     int temp[n1 + n2];
     int copied = 0, copied1 = 0, copied2 = 0;
     int i;
@@ -64,6 +48,7 @@ void merge(int data[], int first, int n1, int n2) {
     for (i = 0; i < copied; i++)
         data[first + i] = temp[i];
 }
+
 void mergeSort(int data[], int first, int n) {
 
     int n1, n2;
@@ -77,6 +62,7 @@ void mergeSort(int data[], int first, int n) {
         merge(data, first, n1, n2);
     }
 }
+
 int partition(int data[], int first, int n) {
 
     int pivot = data[first];
@@ -104,6 +90,7 @@ int partition(int data[], int first, int n) {
     }
     return high;
 }
+
 void quickSort(int data[], int first, int n) {
 
     if (n > 1) {
@@ -114,11 +101,7 @@ void quickSort(int data[], int first, int n) {
         quickSort(data, pivotIndex + 1, n2);
     }
 } 
-/* the split function is needed when you are using a linked list because 
- * we cannot do the splitting inside the mergeSort function simply by 
- * passing the size as an argument and dividing it by 2.  This is because 
- * we cannot index into a linked list like we can an array.
- */
+
 INT_NODE *split(INT_NODE *pList) {
 
     INT_NODE *pList2;
@@ -134,6 +117,7 @@ INT_NODE *split(INT_NODE *pList) {
         return pList2;
     }
 }
+
 INT_NODE *linkedMerge(INT_NODE *pList, INT_NODE *pList2) {
     
     if (NULL == pList)
@@ -148,6 +132,7 @@ INT_NODE *linkedMerge(INT_NODE *pList, INT_NODE *pList2) {
         return pList2;
     }
 } 
+
 INT_NODE *linkedMergeSort(INT_NODE *pList) {
     
     INT_NODE *pList2;
