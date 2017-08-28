@@ -3,8 +3,53 @@
 
 #define MAX 100
 
+/* This is a static variable with external linkage, sometimes referred to 
+ * as an external variable.  An external variable has file scope, external
+ * linkage (it can be used in other translation units), and static storage
+ * duration by default.  
+ *
+ * You create an external variable by placing a DEFINING declaration 
+ * outside of any function. As a matter of documentation, an external 
+ * variable can additionally be declared inside a function that uses it by 
+ * using the extern keyword. If a particular external variable is defined 
+ * in one source code file (.c) and is used in a second source code file, 
+ * (.c) declaring the variable in the second file with extern is mandatory. 
+ * If you declare this extern variable in the second file outside of any
+ * functions, it will have file scope, whereas if you declare it inside 
+ * a function, it will have block scope.
+ *
+ * When you define a variable that you intend to be an external variable,
+ * you can either initialize it, or simply define it and then assign to 
+ * the variable in another file.  Technically speaking, you don't have 
+ * to.  You could create several 'tentative definitions' of the variable 
+ * over multiple files (BUT THIS IS NOT A GOOD IDEA).  Technically, you 
+ * could also 'initialize' the referencing ('extern') declarations in the 
+ * other file if the variable is declared there outside of any functions 
+ * (file scope).  This will still generate a warning, though.  If you try 
+ * to initialize the 'extern' variable inside of a function in another 
+ * file, you will get an compilation error.
+ */
+int testNumber = 554455;
 int A[MAX + 1];
 
+/* Functions, too, have storage classes. A function can be either external 
+ * (the default) or static. (C99 adds a third possibility, the inline 
+ * function, discussed in Chapter 16, “The C Preprocessor and the C Library.
+ * ”) An external function can be accessed by functions in other files, but
+ * a static function can be used only within the defining file. Consider, 
+ * for example, a file containing this function prototypes:
+ *
+ * static double beta(int, int);
+ *
+ * Because this beta() is restricted to one file, you can use a different 
+ * function having the same name in the other files. One reason to use the 
+ * static storage class is to create functions that are private to a 
+ * particular module, thereby avoiding the possibility of name conflicts. 
+ * The usual practice is to use the extern keyword when declaring functions
+ * defined in other files. This practice is mostly a matter of clarity 
+ * because a function declaration is assumed to be extern unless the keyword
+ * static is used.
+ */
 void bubbleUp(int A[], int lastI) {
     if (lastI > 0 && A[lastI] > A[(lastI - 1) / 2]) {
         int temp = A[lastI];
