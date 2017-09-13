@@ -40,7 +40,7 @@ int z = x;
 /* This initialization below is NOT allowed because z is NOT a compile-time
  * constant.
  */
-int w = z;
+//int w = z;
 
 /* This array is viewed as a VLA by C even though x is declared using the 
  * const keyword (arrays must be initialized with integer literals or 
@@ -167,39 +167,45 @@ int main(void) {
      * The return value of the 'sizeof' operator is considered a 
      * a constant expression.
      */
+    /*
     testNumber = 88;
     //static int external_array[sizeof(int)];
     printf("The external variable 'testNumber' = %d\n", testNumber);
     INT_NODE *cursor = NULL;
     INT_NODE *myList = makeList();
     INT_NODE *myNewList = NULL;
+    */
    
     int test[14] = {35, 11, 4, 79, 43, 19, 22, 51, 2, 11, 87, 14, 29, 61};
+    /*
     for (cursor = myList; cursor != NULL; cursor = cursor->next) 
         printf("%d%s", cursor->element,
                         (NULL == cursor->next) ? "\n": "  ");
-
+    
     myNewList = linkedMergeSort(myList);
 
     for (cursor = myNewList; cursor != NULL; cursor = cursor->next)
         printf("%d%s", cursor->element,
                         (NULL == cursor->next) ? "\n": "  ");
-
+    */
     /* When you iterate over myList a second time, not all of the elements
      * are printed out (sometimes only 1 or 2).  Presumably the 
      * linkedMergeSort function destroys the original list?  (Is there any
      * way to avoid this?).  You will need to make a copy of the linked 
      * list beforehand if need be.
      */
+
+    /*
     for (cursor = myList; cursor != NULL; cursor = cursor->next) 
         printf("%d%s", cursor->element,
                         (NULL == cursor->next) ? "\n": "  ");
+    */
 
     int i;
     for (i = 0; i < 14; i++)
         printf("%d  ", test[i]);
     printf("\n");
-    heapSort2(test, 14);
+    shellSort(test, 0, 14);
     for (i = 0; i < 14; i++)
         printf("%d  ", test[i]);
     printf("\n");

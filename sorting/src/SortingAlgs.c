@@ -4,12 +4,8 @@
  * place the INT_NODE type directly in this file because the linked list
  * mergesort functions use this type.
  */
-//#include "SortingAlgs.h"
+#include "SortingAlgs.h"
 
-typedef struct INT_NODE {
-    int element;
-    struct INT_NODE *next;
-} INT_NODE;
 
 void selectionSort(int data[], int first, int n) {
 
@@ -26,6 +22,7 @@ void selectionSort(int data[], int first, int n) {
         data[i] = temp;
     }
 }
+
 void insertionSort(int data[], int first, int n) {
 
     int i, j, entry;
@@ -36,6 +33,26 @@ void insertionSort(int data[], int first, int n) {
         data[j] = entry;
     }
 }
+
+void shellSort(int data[], int first, int n) {
+
+    int i, j, entry;
+    int h = 1;
+
+    while (h <= n / 3)
+        h = 3 * h + 1;
+
+    while (h >= 1) {
+        for (i = first + h; i < n; i += h) {
+            entry = data[i];
+            for (j = i; j > first && data[j - h] > entry; j -= h)
+                data[j] = data[j - h];
+            data[j] = entry;
+        }
+        h = (h - 1) / 3;
+    }
+}
+
 void merge(int data[], int first, int n1, int n2) {
 
     /* This would be considered a variable length array which is a C99 
@@ -64,6 +81,7 @@ void merge(int data[], int first, int n1, int n2) {
     for (i = 0; i < copied; i++)
         data[first + i] = temp[i];
 }
+
 void mergeSort(int data[], int first, int n) {
 
     int n1, n2;
@@ -77,6 +95,7 @@ void mergeSort(int data[], int first, int n) {
         merge(data, first, n1, n2);
     }
 }
+
 int partition(int data[], int first, int n) {
 
     int pivot = data[first];
@@ -104,6 +123,7 @@ int partition(int data[], int first, int n) {
     }
     return high;
 }
+
 void quickSort(int data[], int first, int n) {
 
     if (n > 1) {
@@ -134,6 +154,7 @@ INT_NODE *split(INT_NODE *pList) {
         return pList2;
     }
 }
+
 INT_NODE *linkedMerge(INT_NODE *pList, INT_NODE *pList2) {
     
     if (NULL == pList)
@@ -148,6 +169,7 @@ INT_NODE *linkedMerge(INT_NODE *pList, INT_NODE *pList2) {
         return pList2;
     }
 } 
+
 INT_NODE *linkedMergeSort(INT_NODE *pList) {
     
     INT_NODE *pList2;

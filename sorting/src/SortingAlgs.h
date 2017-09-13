@@ -15,6 +15,7 @@ typedef struct INT_NODE {
 
 void selectionSort(int data[], int first, int n);
 void insertionSort(int data[], int first, int n);
+void shellSort(int data[], int first, int n);
 void merge(int data[], int first, int n1, int n2);
 void mergeSort(int data[], int first, int n);
 int partition(int data[], int first, int n);
