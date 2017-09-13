@@ -30,6 +30,25 @@ void insertionSort(int data[], int first, int n) {
     }
 }
 
+void shellSort(int data[], int first, int n) {
+
+    int i, j, entry;
+    int h = 1;
+
+    while (h <= n / 3)
+        h = 3 * h + 1;
+
+    while (h >= 1) {
+        for (i = first + h; i < n; i += h) {
+            entry = data[i];
+            for (j = i; j > first && data[j - h] > entry; j -= h)
+                data[j] = data[j - h];
+            data[j] = entry;
+        }
+        h = (h - 1) / 3;
+    }
+}
+
 void merge(int data[], int first, int n1, int n2) {
 
     int temp[n1 + n2];
