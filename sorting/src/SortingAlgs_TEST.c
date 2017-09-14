@@ -62,7 +62,7 @@ int main(void) {
     for (i = 0; i < 200; i++)
         printf("%3d%s", test[i], ((i + 1) % 10 == 0) ? "\n": "  ");
     printf("\n");
-    shellSort(test, 0, 200);
+    shellSort(test, 100, 200);
     for (i = 0; i < 200; i++)
         printf("%3d%s", test[i], ((i + 1) % 10 == 0) ? "\n": "  ");
     printf("\n");

@@ -35,13 +35,13 @@ void shellSort(int data[], int first, int n) {
     int i, j, entry;
     int h = 1;
 
-    while (h <= n / 3)
+    while (h <= (n - first) / 3)
         h = 3 * h + 1;
 
     while (h >= 1) {
         for (i = first + h; i < n; i++) {
             entry = data[i];
-            for (j = i; j >= h && data[j - h] > entry; j -= h)
+            for (j = i; j >= first + h && data[j - h] > entry; j -= h)
                 data[j] = data[j - h];
             data[j] = entry;
         }
