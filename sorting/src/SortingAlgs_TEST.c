@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "SortingAlgs.h"
+#include <time.h>
 
 
 INT_NODE* makeList(void) {
@@ -24,7 +25,7 @@ INT_NODE* makeList(void) {
     return pHead;
 }
 int main(void) {
-    
+/*    
     INT_NODE *cursor = NULL;
     INT_NODE *myList = makeList();
     INT_NODE *myNewList = NULL;
@@ -39,24 +40,31 @@ int main(void) {
     for (cursor = myNewList; cursor != NULL; cursor = cursor->next)
         printf("%d%s", cursor->element,
                         (NULL == cursor->next) ? "\n": "  ");
-
+*/
     /* When you iterate over myList a second time, not all of the elements
      * are printed out (sometimes only 1 or 2).  Presumably the 
      * linkedMergeSort function destroys the original list?  (Is there any
      * way to avoid this?).  You will need to make a copy of the linked 
      * list beforehand if need be.
      */
+/*
     for (cursor = myList; cursor != NULL; cursor = cursor->next) 
         printf("%d%s", cursor->element,
                         (NULL == cursor->next) ? "\n": "  ");
+*/
 
+    int test[200];
     int i;
-    for (i = 0; i < 14; i++)
-        printf("%d  ", test[i]);
+
+    srand((unsigned) time(NULL));
+    for (i = 0; i < 200; i++)
+        test[i] = rand() % 250 + 1;
+    for (i = 0; i < 200; i++)
+        printf("%3d%s", test[i], ((i + 1) % 10 == 0) ? "\n": "  ");
     printf("\n");
-    heapSort2(test, 14);
-    for (i = 0; i < 14; i++)
-        printf("%d  ", test[i]);
+    shellSort(test, 0, 200);
+    for (i = 0; i < 200; i++)
+        printf("%3d%s", test[i], ((i + 1) % 10 == 0) ? "\n": "  ");
     printf("\n");
 
     return 0;
