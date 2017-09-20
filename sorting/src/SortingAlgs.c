@@ -45,7 +45,7 @@ void shellSort(int data[], int first, int n) {
                 data[j] = data[j - h];
             data[j] = entry;
         }
-        h = (h - 1) / 3;
+        h = h / 3;
     }
 }
 
