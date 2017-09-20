@@ -34,22 +34,89 @@ void insertionSort(int data[], int first, int n) {
     }
 }
 
+/* As can be seen from the following implementation, shellSort is a modification
+ * of insertionSort that can achieve running times of O(n^1.5) if properly 
+ * optimized.  Increment sequences have been found that lower the worst-case # 
+ * of compares to n^1.2, but these are primarily of academic interest.
+ *
+ * Average-number of compares for randomly ordered input is unknown.
+ *
+ * Best case running time is still O(n)?
+ */
 void shellSort(int data[], int first, int n) {
 
     int i, j, entry;
+
+    /* h is the current value in the 'increment sequence'.  Each value in the
+     * increment sequence represents the distance between sequential elements
+     * in a subarray. Any increment sequence that ends with a value of 1 can
+     * be used (when h = 1 shellsort becomes 'straight insertion sort'). You
+     * can store the values of the increment sequence in a local array, or if
+     * you want to save space, you can calculate them as shown below.
+     */ 
     int h = 1;
 
+    /* This while loop calculates the increment sequence 1, 4, 13, 40, 121,
+     * 364... Notice that the difference between the ith + 1 term, and the ith 
+     * term is 3^i.  That is, the value of the ith term in the sequence can
+     * be found by doing the following summation; (3^(i-1) + 3^(i-2) + ... +
+     * 3^0).  
+     *
+     * Originally, the while loop expression had a '<=' sign. The '<' sign must
+     * be used (The problem occurs if 'n' is equal to one of the values in the
+     * increment sequence.  'h' will then have the same value of 'n', and you
+     * will get a "java.lang.IndexOutOfBoundsException" at the 
+     * 'entry = data[i];' assignment (if you are compiling this in Java).
+     */
     while (h < (n - first) / 3)
         h = 3 * h + 1;
 
     while (h >= 1) {
+
+        /* Each time i is increased, the program begins sorting the next
+         * subarray.  That is, if 'first' equals 0, then initially i = h.  For
+         * each value of i, insertion sort is done on the subarrays;
+         *
+         * [0, h, 2h, 3h,...]
+         * [1, 1+h, 1+2h, 1+3h,...]
+         * [2, 2+h, 2+2h, 2+3h,...]
+         * .
+         * .
+         * .
+         * [h-1, (h-1)+h, (h-1)+2h, (h-1)+3h,...]
+         */
         for (i = first + h; i < n; i++) {
             entry = data[i];
+
+            /* Initially I had the first conditional expression inside the 
+             * for loop as 'j > first + i % h'.  Both will work, but why 
+             * perform an extra calculation if you don't have to? If 'first' is
+             * 0, the value of 'j' cannot be < 'h'.  If 'j' were allowed to be
+             * < 'h', then you would get a 'java.lang.IndexOutOfBoundsException'
+             * in the second relational expression in the for loop condition;
+             * 'data[j - h] > entry' if you were compiling this code in Java
+             * because the index would be negative.
+             *
+             * Because of this last point, the short circuit logical operator
+             * '&&' is REQUIRED so that when the first relational expression
+             * is false, the second one does not get checked.  Because of the 
+             * way that '&&' operates, you MUST have the 'data[j - h] > entry'
+             * expression second.
+             */
             for (j = i; j >= first + h && data[j - h] > entry; j -= h)
                 data[j] = data[j - h];
             data[j] = entry;
         }
-        h = (h - 1) / 3;
+        /* This decreases h to the next value in the increment sequence. Because
+         * the value of each subsequent increment decreases, Knuth states that
+         * shellsort is also known as 'the diminishing increment sort'.  
+         *
+         * I initially used the expression statement 'h = (h - 1) / 3'. However,
+         * since integer division is used, 'h = h / 3' can be used since the 
+         * result will be truncated to an integer.  This also saves us one 
+         * subtraction operation.
+         */
+        h = h / 3;
     }
 }
 
