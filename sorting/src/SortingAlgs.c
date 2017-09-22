@@ -19,6 +19,23 @@ void selectionSort(int data[], int first, int n) {
     }
 }
 
+int *compCount(int data[], int first, int n) {
+    
+    int *counts = (int*) calloc(n, sizeof *counts);
+    if (counts) {
+        int i, j;
+        for (i = first; i < n - 1; i++) {
+            for (j = i + 1; j < n; j++) {
+                if (data[i] >= data[j])
+                    counts[i]++;
+                else
+                    counts[j]++;
+            }
+        }
+    }
+    return counts;
+}
+
 void insertionSort(int data[], int first, int n) {
 
     int i, j, entry;
