@@ -158,6 +158,7 @@ INT_NODE* makeList(void) {
     }
     return pHead;
 }
+
 int main(void) {
     /* This is considered a variable length array even though it uses x
      * (a constant declared using the 'const' keyword) for its size.  As 
@@ -176,7 +177,11 @@ int main(void) {
     INT_NODE *myNewList = NULL;
     */
    
-    int test[14] = {35, 11, 4, 79, 43, 19, 22, 51, 2, 11, 87, 14, 29, 61};
+    int test[16] = {35, 11, 4, 79, 43, 19, 22, 51, 
+                    2, 11, 87, 14, 29, 61, 3, 17};
+
+    int knuth[16] = {503, 87, 512, 61, 908, 170, 897, 275, 
+                     653, 426, 154, 509, 612, 677, 765, 703};
     /*
     for (cursor = myList; cursor != NULL; cursor = cursor->next) 
         printf("%d%s", cursor->element,
@@ -202,13 +207,24 @@ int main(void) {
     */
 
     int i;
-    for (i = 0; i < 14; i++)
-        printf("%d  ", test[i]);
+    int *counts;
+    int sorted[16];
+
+    for (i = 0; i < 16; i++)
+        printf("%4d", knuth[i]);
     printf("\n");
-    shellSort(test, 0, 14);
-    for (i = 0; i < 14; i++)
-        printf("%d  ", test[i]);
+    //shellSort(test, 0, 16);
+    counts = compCount(knuth, 0, 16);
+    for (i = 0; i < 16; i++)
+        printf("%4d", counts[i]);
     printf("\n");
 
+    for (i = 0; i < 16; i++)
+        sorted[counts[i]] = knuth[i];
+    for (i = 0; i < 16; i++)
+        printf("%4d", sorted[i]);
+    printf("\n");
+
+    free(counts);
     return 0;
 }

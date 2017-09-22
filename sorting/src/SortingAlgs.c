@@ -23,6 +23,38 @@ void selectionSort(int data[], int first, int n) {
     }
 }
 
+/* This algorithm is the one described in (Knuth, Vol. 3, 75). Knuth calls this
+ * algorithm "Comparison counting". This implemention is a rewrite of Program
+ * C on page 76.  THIS ALGORITHM DOES NOT ACTUALLY SORT THE ELEMENTS IN DATA,
+ * it only returns a heap-allocated int array indicating the number of elements
+ * of the 'data' array that each element of the 'data' array is greater than.
+ * 'counts' and 'data' are parallel arrays in the sense that identical indices
+ * correspond to the same element.  The numbers in the returned counts array
+ * indicate the indices where the corresponding elements in the 'data' array
+ * should be placed.
+ *
+ * The easiest (and most efficient?) way to actually sort the elements of 'data'
+ * using the information in 'counts' is to allocate a new array in 'main' and 
+ * place the elements of 'data' in the positions specified by 'counts'.  This
+ * is shown in the SortingAlgs_TEST.c file.
+ */
+int *compCount(int data[], int first, int n) {
+    
+    int *counts = (int*) calloc(n, sizeof *counts);
+    if (counts) {
+        int i, j;
+        for (i = first; i < n - 1; i++) {
+            for (j = i + 1; j < n; j++) {
+                if (data[i] >= data[j])
+                    counts[i]++;
+                else
+                    counts[j]++;
+            }
+        }
+    }
+    return counts;
+}
+
 void insertionSort(int data[], int first, int n) {
 
     int i, j, entry;
