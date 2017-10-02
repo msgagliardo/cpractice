@@ -62,23 +62,76 @@ int *compCount(int data[], int first, int n) {
  * algorithm 'Distribution counting'. This algortihm is not implemented in MIXAL
  * in TAOCP.  This 'distribution counting' algorithm is "primarily applicable
  * in the case that many equal keys are present, and when all keys fall into the
- * range u <= K <= v where (v - u) is small.
+ * range u <= K <= v where (v - u) is small.  When the range (v - u) is small,
+ * this sorting procedure is very fast.  Distribution sorting as described in 
+ * TAOCP was first developed by H. Seward in 1954 for use with radix sorting
+ * techniques, and it was also published under the name 'Mathsort' by 
+ * W. Feurzeig.
+ *
+ * In Knuth's description of 'distribution counting', the array that he calls
+ * 'count' is the same size as the 'data' array.  For my implementation, I 
+ * decided to make the 'count' array just the size of the range of numbers.  I
+ * did this to save space.  For example, using the description of the algorithm
+ * in TAOCP, if you have a 'data' array whose elements range from 500000 - 
+ * 500010 you would need to allocate an array of size 500010, but your 'count'
+ * array only needs to hold 10 elements.   
  */
 int *distCount(int data[], int low, int high, int n) {
 
     int i, j;
-    int count[high - low + 1];
+
+    /* cnt_size represents the range between the highest element in 'data' and
+     * the lowest element in 'data'
+     */
+    int cnt_size = high - low + 1;
+    int count[cnt_size];
+
+    /* the 'calloc' function is used so that a heap-dynamic array will be
+     * allocated, and the elements will all initially be set to zero.  The array
+     * needs to be heap-dynamic so that a pointer can safely be returned from 
+     * this function.
+     *
+     * This array is needed because 'data' cannot be sorted 'in place' using
+     * this algorithm.  That is, you cannot simply overwrite the values in the
+     * 'data' array with the new sorted values.  The reason for this is because
+     * the values in the 'data' array are used to index into the 'count' array.
+     * If you overwrite an element in 'data', the wrong key will be used when
+     * you later try to index into the 'count' array.  For example, suppose 
+     * values in 'data' range from 10 - 15, and there are two 10s (the first
+     * element and the last element).  By the time the last 10 in 'data' is 
+     * reached, the value of 'count[0]' will be 0, and the program would try
+     * to insert the 10 at 'data[-1]'
+     */
     int *result = (int *) calloc(n, sizeof *result);
 
-    for (i = 0; i < (high - low + 1); i++)
+    /* This for loop sets all the elements of 'count' to 0 because arrays that
+     * are part of the automatic storage class initally have garbage values.
+     */
+    for (i = 0; i < cnt_size; i++)
         count[i] = 0;
+    /* This loop adds up each time a number in 'data' appears.  The number at
+     * the low end of the range represents index 0 in the 'count' array.  The 
+     * number at the high end of the range represents the index 'high - low'
+     */
     for (i = 0; i < n; i++)
         count[data[i] - low]++;
-    for (i = 1; i < (high - low + 1); i++)
+    /* For each element in 'count' starting at index 1, the element is added to
+     * the element which preceded it.  After the loop has finished, each element
+     * in 'count' represents the number of elements that are <= the element at
+     * 'i + low' in the 'data' array.  It's sorted position in 'data' should
+     * therefore be at index 'count[i] - 1'.  That is the purpose of the last
+     * for loop.
+     */
+    for (i = 1; i < cnt_size; i++)
         count[i] = count[i] + count[i - 1];
-    for (i = n - 1; i >= 0; i--) {
+    for (i = 0; i < n; i++) {
         j = count[data[i] - low];
         result[j - 1] = data[i];
+        /* The values in the 'count' array are decreased by 1 after the elements
+         * are added to 'result' so that the next time the same element is 
+         * encountered in 'data', it doesn't overwrite the same element in
+         * result, but instead is placed 1 index before it.
+         */
         count[data[i] - low] = j - 1;
     }
     return result;
