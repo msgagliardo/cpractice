@@ -182,6 +182,11 @@ int main(void) {
 
     int knuth[16] = {503, 87, 512, 61, 908, 170, 897, 275, 
                      653, 426, 154, 509, 612, 677, 765, 703};
+
+    int similar[30] = {11, 12, 14, 12, 15, 10, 11, 13, 13, 11,
+                       10, 11, 13, 12, 12, 15, 14, 12, 13, 11,
+                       10, 13, 12, 11, 14, 14, 11, 15, 13, 10};
+    int *distSorted;
     /*
     for (cursor = myList; cursor != NULL; cursor = cursor->next) 
         printf("%d%s", cursor->element,
@@ -206,6 +211,7 @@ int main(void) {
                         (NULL == cursor->next) ? "\n": "  ");
     */
 
+    /*
     int i;
     int *counts;
     int sorted[16];
@@ -226,5 +232,17 @@ int main(void) {
     printf("\n");
 
     free(counts);
+    */
+
+    int i;
+    for (i = 0; i < 30; i++)
+        printf("%4d%s", similar[i], (0 == (i + 1) % 15) ? "\n": "");
+    printf("\n");
+    distSorted = distCount(similar, 10, 15, 30);
+    for (i = 0; i < 30; i++)
+        printf("%4d%s", distSorted[i], (0 == (i + 1) % 15) ? "\n": "");
+    printf("\n");
+
+    free(distSorted);
     return 0;
 }

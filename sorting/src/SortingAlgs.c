@@ -25,13 +25,13 @@ void selectionSort(int data[], int first, int n) {
 
 /* This algorithm is the one described in (Knuth, Vol. 3, 75). Knuth calls this
  * algorithm "Comparison counting". This implemention is a rewrite of Program
- * C on page 76.  THIS ALGORITHM DOES NOT ACTUALLY SORT THE ELEMENTS IN DATA,
+ * C on page 76.  THIS ALGORITHM DOES NOT ACTUALLY SORT THE ELEMENTS IN 'DATA',
  * it only returns a heap-allocated int array indicating the number of elements
  * of the 'data' array that each element of the 'data' array is greater than.
  * 'counts' and 'data' are parallel arrays in the sense that identical indices
  * correspond to the same element.  The numbers in the returned counts array
  * indicate the indices where the corresponding elements in the 'data' array
- * should be placed.
+ * should be placed.  
  *
  * The easiest (and most efficient?) way to actually sort the elements of 'data'
  * using the information in 'counts' is to allocate a new array in 'main' and 
@@ -40,7 +40,10 @@ void selectionSort(int data[], int first, int n) {
  */
 int *compCount(int data[], int first, int n) {
     
-    int *counts = (int*) calloc(n, sizeof *counts);
+    /* 'calloc()' is used instead of 'malloc' because it initializes all the 
+     * elements in the array to 0.
+     */
+    int *counts = (int *) calloc(n, sizeof *counts);
     if (counts) {
         int i, j;
         for (i = first; i < n - 1; i++) {
@@ -53,6 +56,32 @@ int *compCount(int data[], int first, int n) {
         }
     }
     return counts;
+}
+
+/* This algorithm is the one described in (Knuth, Vol. 3, 78).  Knuth calls this
+ * algorithm 'Distribution counting'. This algortihm is not implemented in MIXAL
+ * in TAOCP.  This 'distribution counting' algorithm is "primarily applicable
+ * in the case that many equal keys are present, and when all keys fall into the
+ * range u <= K <= v where (v - u) is small.
+ */
+int *distCount(int data[], int low, int high, int n) {
+
+    int i, j;
+    int count[high - low + 1];
+    int *result = (int *) calloc(n, sizeof *result);
+
+    for (i = 0; i < (high - low + 1); i++)
+        count[i] = 0;
+    for (i = 0; i < n; i++)
+        count[data[i] - low]++;
+    for (i = 1; i < (high - low + 1); i++)
+        count[i] = count[i] + count[i - 1];
+    for (i = n - 1; i >= 0; i--) {
+        j = count[data[i] - low];
+        result[j - 1] = data[i];
+        count[data[i] - low] = j - 1;
+    }
+    return result;
 }
 
 void insertionSort(int data[], int first, int n) {
