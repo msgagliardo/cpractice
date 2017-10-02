@@ -36,6 +36,27 @@ int *compCount(int data[], int first, int n) {
     return counts;
 }
 
+int *distCount(int data[], int low, int high, int n) {
+
+    int i, j;
+    int cnt_size = high - low + 1;
+    int count[cnt_size];
+    int *result = (int *) calloc(n, sizeof *result);
+
+    for (i = 0; i < cnt_size; i++)
+        count[i] = 0;
+    for (i = 0; i < n; i++)
+        count[data[i] - low]++;
+    for (i = 1; i < cnt_size; i++)
+        count[i] = count[i] + count[i - 1];
+    for (i = 0; i < n; i++) {
+        j = count[data[i] - low];
+        result[j - 1] = data[i];
+        count[data[i] - low] = j - 1;
+    }
+    return result;
+}
+
 void insertionSort(int data[], int first, int n) {
 
     int i, j, entry;
