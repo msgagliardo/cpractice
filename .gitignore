@@ -29,6 +29,10 @@
 ehthumbs.db
 Thumbs.db
 
+# Executables #
+###############
+*.out
+
 # Specific directories #
 ########################
 chapterExamples/
