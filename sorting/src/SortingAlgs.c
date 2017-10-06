@@ -163,7 +163,7 @@ int *listInsertion(int data[], int n) {
             links[i] = 0;
             links[j] = i;
             if (i - 1 >= 0)
-                links[i - 1] = i + 1;
+                links[i - 1] = links[i];
         } else if (j == i) {
             if (i - 1 >= 0)
                 links[i - 1] = i;
@@ -171,7 +171,7 @@ int *listInsertion(int data[], int n) {
             links[i] = j + 1;
             links[j] = i;
             if (i - 1 >= 0)
-                links[i - 1] = i + 1;
+                links[i - 1] = links[i];
         }
     }
     return links;
