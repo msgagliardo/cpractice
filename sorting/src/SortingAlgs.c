@@ -148,6 +148,35 @@ void insertionSort(int data[], int first, int n) {
     }
 }
 
+int *listInsertion(int data[], int n) {
+
+    int i, j, entry;
+    int *links = (int *) calloc(n, sizeof *links);
+    links[n - 1] = 0;
+    links[n - 2] = n - 1;
+
+    for (i = n - 2; i >= 0; i--) {
+        entry = data[i];
+        for (j = i; j < n - 1 && entry > data[links[j]]; j++)
+            continue;
+        if (n - 1 == j) {
+            links[i] = 0;
+            links[j] = i;
+            if (i - 1 >= 0)
+                links[i - 1] = i + 1;
+        } else if (j == i) {
+            if (i - 1 >= 0)
+                links[i - 1] = i;
+        } else {
+            links[i] = j + 1;
+            links[j] = i;
+            if (i - 1 >= 0)
+                links[i - 1] = i + 1;
+        }
+    }
+    return links;
+}
+
 /* As can be seen from the following implementation, shellSort is a modification
  * of insertionSort that can achieve running times of O(n^1.5) if properly 
  * optimized.  Increment sequences have been found that lower the worst-case # 

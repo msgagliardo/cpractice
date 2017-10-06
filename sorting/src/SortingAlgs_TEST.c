@@ -187,6 +187,7 @@ int main(void) {
                        10, 11, 13, 12, 12, 15, 14, 12, 13, 11,
                        10, 13, 12, 11, 14, 14, 11, 15, 13, 10};
     int *distSorted;
+    int *links;
     /*
     for (cursor = myList; cursor != NULL; cursor = cursor->next) 
         printf("%d%s", cursor->element,
@@ -235,14 +236,14 @@ int main(void) {
     */
 
     int i;
-    for (i = 0; i < 30; i++)
-        printf("%4d%s", similar[i], (0 == (i + 1) % 15) ? "\n": "");
+    for (i = 0; i < 16; i++)
+        printf("%4d%s", knuth[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n");
-    distSorted = distCount(similar, 10, 15, 30);
-    for (i = 0; i < 30; i++)
-        printf("%4d%s", distSorted[i], (0 == (i + 1) % 15) ? "\n": "");
+    links = listInsertion(knuth, 16);
+    for (i = 0; i < 16; i++)
+        printf("%4d%s", links[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n");
 
-    free(distSorted);
+    free(links);
     return 0;
 }
