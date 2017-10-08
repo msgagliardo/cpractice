@@ -183,6 +183,14 @@ int main(void) {
     int knuth[16] = {503, 87, 512, 61, 908, 170, 897, 275, 
                      653, 426, 154, 509, 612, 677, 765, 703};
 
+    /*
+    link[i - 1] = link[i];
+    link[i] = link[j];
+    link[j] = i;
+
+    3 [11, 10, 12, 1, -1, 7, 4, 9, 13, 11, 5, 2, 8, 15, 6, 14] 
+    */
+
     int similar[30] = {11, 12, 14, 12, 15, 10, 11, 13, 13, 11,
                        10, 11, 13, 12, 12, 15, 14, 12, 13, 11,
                        10, 13, 12, 11, 14, 14, 11, 15, 13, 10};
@@ -196,8 +204,7 @@ int main(void) {
     myNewList = linkedMergeSort(myList);
 
     for (cursor = myNewList; cursor != NULL; cursor = cursor->next)
-        printf("%d%s", cursor->element,
-                        (NULL == cursor->next) ? "\n": "  ");
+        printf("%d%s", cursor->element, (NULL == cursor->next) ? "\n": "  ");
     */
     /* When you iterate over myList a second time, not all of the elements
      * are printed out (sometimes only 1 or 2).  Presumably the 
@@ -240,10 +247,15 @@ int main(void) {
         printf("%4d%s", knuth[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n");
     links = listInsertion(knuth, 16);
-    for (i = 0; i < 16; i++)
+    for (i = 0; i < 17; i++)
         printf("%4d%s", links[i], (0 == (i + 1) % 20) ? "\n": "");
+    printf("\n\n");
+
+    for (i = 0; links[i] >= 0; i = links[i] + 1)
+        printf("%4d%s", knuth[links[i]], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n");
 
     free(links);
+
     return 0;
 }

@@ -151,27 +151,22 @@ void insertionSort(int data[], int first, int n) {
 int *listInsertion(int data[], int n) {
 
     int i, j, entry;
-    int *links = (int *) calloc(n, sizeof *links);
-    links[n - 1] = 0;
-    links[n - 2] = n - 1;
+    int *links = (int *) calloc(n + 1, sizeof *links);
+    links[n] = -1;
+    links[n - 1] = n - 1;
 
     for (i = n - 2; i >= 0; i--) {
         entry = data[i];
-        for (j = i; j < n - 1 && entry > data[links[j]]; j++)
+        for (j = i + 1; links[j] >= 0 && entry > data[links[j]]; 
+                j = links[j] + 1)
             continue;
-        if (n - 1 == j) {
-            links[i] = 0;
-            links[j] = i;
-            if (i - 1 >= 0)
-                links[i - 1] = links[i];
-        } else if (j == i) {
-            if (i - 1 >= 0)
-                links[i - 1] = i;
+
+        if (j == i + 1) {
+            links[i] = i;
         } else {
-            links[i] = j + 1;
+            links[i] = links[i + 1];
+            links[i + 1] = links[j];
             links[j] = i;
-            if (i - 1 >= 0)
-                links[i - 1] = links[i];
         }
     }
     return links;
