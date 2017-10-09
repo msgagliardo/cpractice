@@ -183,11 +183,13 @@ int main(void) {
     int knuth[16] = {503, 87, 512, 61, 908, 170, 897, 275, 
                      653, 426, 154, 509, 612, 677, 765, 703};
 
-    /*
-    link[i - 1] = link[i];
-    link[i] = link[j];
-    link[j] = i;
+    int knuth_sorted[16] = {61, 87, 154, 170, 275, 426, 503, 509,
+                            512, 612, 653, 677, 703, 765, 897, 908};
 
+    int knuth_reversed[16] = {908, 897, 765, 703, 677, 653, 612, 512,
+                              509, 503, 426, 275, 170, 154, 87, 61};
+    int knuth_one[1] = {908};
+    /*
     3 [11, 10, 12, 1, -1, 7, 4, 9, 13, 11, 5, 2, 8, 15, 6, 14] 
     */
 
@@ -243,18 +245,20 @@ int main(void) {
     */
 
     int i;
-    for (i = 0; i < 16; i++)
-        printf("%4d%s", knuth[i], (0 == (i + 1) % 20) ? "\n": "");
+    for (i = 0; i < 1; i++)
+        printf("%4d%s", knuth_one[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n");
-    links = listInsertion(knuth, 16);
-    for (i = 0; i < 17; i++)
-        printf("%4d%s", links[i], (0 == (i + 1) % 20) ? "\n": "");
-    printf("\n\n");
+    links = listInsertion(knuth_one, 1);
+    
+    if (links) {
+        for (i = 0; i < 17; i++)
+            printf("%4d%s", links[i], (0 == (i + 1) % 20) ? "\n": "");
+        printf("\n\n");
 
-    for (i = 0; links[i] >= 0; i = links[i] + 1)
-        printf("%4d%s", knuth[links[i]], (0 == (i + 1) % 20) ? "\n": "");
-    printf("\n");
-
+        for (i = 0; links[i] >= 0; i = links[i] + 1)
+            printf("%4d%s", knuth_one[links[i]], (0 == (i + 1) % 20) ? "\n": "");
+        printf("\n");
+    }
     free(links);
 
     return 0;

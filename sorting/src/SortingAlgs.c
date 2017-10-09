@@ -148,28 +148,134 @@ void insertionSort(int data[], int first, int n) {
     }
 }
 
+/* This is an implementation of the algorithm that Knuth calls "Algorithm L (
+ * List insertion)" on page 96 of TAOCP Vol. 3.  On that page, Knuth concludes
+ * that the "right data structure for straight insertion is a one-way, linked
+ * linear list.", and that "linked allocation (Section 2.2.3) is ideally suited
+ * to insertion, since only a few links need to be changed."  However, the the
+ * MIXAL program (Program L) on page 97 does not appear to utilize a traditonal
+ * linked linear list structure (a series of nodes linked by addresses).
+ *
+ * Instead, it appears that the key and the link are stored together in a 
+ * struct-like structure and these structures are stored in an array called 
+ * 'INPUT'.  
+ *
+ * I decided to let the keys be the elements, themselves, in the 
+ * 'data' array, and I put the links in a parallel-like array called 'links'.
+ * I say 'parallel-like array' because the size of the 'links' array is one
+ * greater than the size of the 'data' array. I did this so I could easily 
+ * determine the index of the smallest element of the 'data' array by storing
+ * it as the first element in the 'links' array.  Because of this extra index
+ * in 'links', the indices 0 - 15 of the data array correspond to indices 1 - 16
+ * of the 'links' array.  Each element in the 'links' array corresponds to the
+ * index in the 'data' array of the next element in the sorted list.
+ */
 int *listInsertion(int data[], int n) {
 
-    int i, j, entry;
-    int *links = (int *) calloc(n + 1, sizeof *links);
-    links[n] = -1;
-    links[n - 1] = n - 1;
+    /* This if statement is here to ensure that only arrays that have 2 or more
+     * elements are sorted.  Like the other sorting functions in this file, it
+     * is possible for someone to pass a NULL pointer as the argument to 'data'
+     * and a number >= 2 for n.  In this case, the behavior of the function is 
+     * undefined.  You could check for this case by having another if statement
+     * that encloses all of the following code, and which the expression 
+     * if (NULL != data).  The less that you account for in your code, the more
+     * restricted your pre-condition for using the function will be.  
+     */
+    if (n > 1) {
+        int i, j, entry;
+        /* I allocated 'links' as a heap-dynamic array so that I could safely
+         * return a pointer to it.  I used the 'calloc' function so that all of
+         * the elements would be initialized to 0.
+         */
+        int *links = (int *) calloc(n + 1, sizeof *links);
+        /* Because the size of the 'links' array is 1 greater than the size of 
+         * the 'data' array, index n of the 'links' array corresponds to index
+         * n - 1 of the 'data' array.  This element is initially set to a
+         * negative number (-1 in this case) to indicate that the n - 1 element
+         * in the 'data' array is the last element of the currently sorted 
+         * portion of the array.  Using a negative number makes this immediately
+         * obvious given the fact that a negative number cannot be used as the
+         * index of an array.
+         */
+        links[n] = -1;
+        /* This statement sets element n - 1 of 'links' (which corresponds to 
+         * element n - 2 of 'data') to the index of the last element in 'data'
+         */
+        links[n - 1] = n - 1;
 
-    for (i = n - 2; i >= 0; i--) {
-        entry = data[i];
-        for (j = i + 1; links[j] >= 0 && entry > data[links[j]]; 
-                j = links[j] + 1)
-            continue;
+        /* This outer for loop is like the outer for loop of straight insertion
+         * sort except that it starts from the end of the array (higher indices)
+         * and moves toward the front of the array (lower indices).
+         */
+        for (i = n - 2; i >= 0; i--) {
+            entry = data[i];
+            /* This inner for loop differs from the inner for loop of a straight
+             * insertion sort.  The first difference is in the index 'j'.  In a
+             * straight insertion, this is set equal to 'i'.  In this function,
+             * however, it is set equal to i + 1.  This is done because 'j' is
+             * going to be used to index into 'links', whereas 'i' was used 
+             * above to index into 'data'.  In order to ensure that we are 
+             * indexing into the correct corresponding element in the 'links'
+             * array, we must add 1 to the 'i' index.
+             *
+             * The first relational expression of the for loop condition is a
+             * check to make sure that we are not currently on the element that
+             * is the last element in the sorted portion of the 'links' array.
+             *
+             * A one must be added to the result of 'links[j]' in the for loop
+             * postcondition because each of the elements of 'links' represent
+             * a valid index for the 'data' array.  These indices range from 
+             * 0 - (n - 1), while their corresponding indices in 'links' range
+             * from 1 - n.  Therefore, in order to get the correct 'j' index
+             * you must add one to the result of 'links[j]'.
+             */
+            for (j = i + 1; links[j] >= 0 && entry > data[links[j]]; 
+                    j = links[j] + 1)
+                continue;
 
-        if (j == i + 1) {
-            links[i] = i;
-        } else {
-            links[i] = links[i + 1];
-            links[i + 1] = links[j];
-            links[j] = i;
+            /* If j == i + 1, then we know that entry <= data[links[j]], and 
+             * consequently, it is <= the smallest element in the sorted part
+             * of the array so far.  In this case, we want to set the link of 
+             * the element that comes before 'entry' in the 'data' array to
+             * the index of 'entry'.  The index of this element in the 'data'
+             * array is i - 1.  Since the corresponding index for this element
+             * in the 'links' array is one greater than this index, it will
+             * simply be equal to 'i'.  We then set this element equal to the
+             * index of entry in 'data' which is 'i'
+             */
+            if (j == i + 1) {
+                links[i] = i;
+            } else {
+                /* If it is not the case that j == i + 1, then it means that 
+                 * 'entry' is > at least one of the elements in the sorted 
+                 * section of the 'data' array.  In this case, we set element
+                 * 'i - 1' of 'data' (element 'i' of 'links') to point to the 
+                 * the element that element 'i' of 'data' was pointing to
+                 * (This corresponds to element 'i + 1' in 'links').  
+                 *
+                 * We then set the new link of element 'i' to the element 'j'
+                 * is pointing to.  'j' represents the index of the last element
+                 * that 'entry' was greater than.  
+                 *
+                 * We then set the link of 'j' to point to 'i', the index of 
+                 * entry.
+                 */
+                links[i] = links[i + 1];
+                links[i + 1] = links[j];
+                links[j] = i;
+            }
         }
+        /* We then return the 'links' array which contains the indices of the
+         * sorted array in order.
+         */
+        return links;
     }
-    return links;
+    /* If the value of n is <= 1, then NULL is returned, because no sorting can
+     * be done on an array of these sizes.  You will not get an error/undefined
+     * behavior if you pass the 'free()' function in 'main' a NULL pointer.  In
+     * this case, the function simply does nothing. 
+     */
+    return NULL;
 }
 
 /* As can be seen from the following implementation, shellSort is a modification
