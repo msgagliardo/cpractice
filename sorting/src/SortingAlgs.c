@@ -68,6 +68,33 @@ void insertionSort(int data[], int first, int n) {
     }
 }
 
+int *listInsertion(int data[], int n) {
+    
+    if (n > 1) {
+        int i, j, entry;
+        int *links = (int *) calloc(n + 1, sizeof *links);
+        links[n] = -1;
+        links[n - 1] = n - 1;
+
+        for (i = n - 2; i >= 0; i--) {
+            entry = data[i];
+            for (j = i + 1; links[j] >= 0 && entry > data[links[j]]; 
+                    j = links[j] + 1)
+                continue;
+
+            if (j == i + 1) {
+                links[i] = i;
+            } else {
+                links[i] = links[i + 1];
+                links[i + 1] = links[j];
+                links[j] = i;
+            }
+        }
+        return links;
+    }
+    return NULL;
+}
+
 void shellSort(int data[], int first, int n) {
 
     int i, j, entry;
