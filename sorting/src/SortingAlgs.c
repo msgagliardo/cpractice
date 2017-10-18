@@ -364,6 +364,29 @@ void shellSort(int data[], int first, int n) {
     }
 }
 
+/* bubbleSort is part of a family of sorting methods called 'exchange' or 
+ * 'transposition' methods that systematically exchange pairs of elements that 
+ * are out of order until no more such pairs exist. 
+ *
+ * Perhaps the most obvious way to sort by exchanges is to compare K1 and K2, 
+ * interchanging R1 and R2 if the keys are out of order; then do the same to 
+ * records R2 and R3, R3 and R4, etc.  During this sequence of operations, 
+ * records with large keys tend to move to the right, and in fact the record 
+ * with the largest key will move up to become RN.  Repetitions of the process 
+ * will get the appropriate records into positions RN-1, RN-2, etc., so that 
+ * all records will ultimately be sorted.  
+ *
+ * “[...] The method is called ‘bubble sorting’ because large elements ‘bubble 
+ * up’ to their proper position, by contrast with the ‘sinking sort’ (that is, 
+ * straight insertion) in which elements sink down to an appropriate level.  
+ * The bubble sort is also known by more prosaic names such as ‘exchange 
+ * selection’ or ‘propagation.’
+ *
+ * The most important thing to realize about bubbleSort is “After each pass 
+ * through the file, it is not hard to see that ALL RECORDS ABOVE AND INCLUDING
+ * THE LAST ONE TO BE EXCHANGED MUST BE IN THEIR FINAL POSITION, SO THEY NEED 
+ * NOT BE EXAMINED ON SUBSEQUENT PASSES.”  (Knuth, Vol. 3, 105-107)
+ */ 
 void bubbleSort(int data[], int first, int n) {
 
     int i, temp;
@@ -377,10 +400,23 @@ void bubbleSort(int data[], int first, int n) {
                 temp = data[i];
                 data[i] = data[i + 1];
                 data[i + 1] = temp;
+                /* In order to keep track of the last index of an exchange,
+                 * every time an exchange happens, 'lastIndex' is set equal to
+                 * the index of the for loop 'i'
+                 */
                 lastIndex = i;
             }
         }
+        /* If there were exchanges that took place, 'lastIndex' will then be 
+         * set to the index of the last exchange, and 'size' will then be set
+         * equal to this value.  This will let us know how much of the list
+         * we will have to traverse in the next for loop iteration.
+         */
         size = lastIndex;
+        /* 'lastIndex' is set back to 'first' so that if no exchanges take place
+         * during the next for loop, 'size' will be equal to 'first' and the 
+         * program will stop.
+         */
         lastIndex = first;
     }
 }
