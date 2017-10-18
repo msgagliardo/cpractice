@@ -152,7 +152,7 @@ void insertionSort(int data[], int first, int n) {
  * List insertion)" on page 96 of TAOCP Vol. 3.  On that page, Knuth concludes
  * that the "right data structure for straight insertion is a one-way, linked
  * linear list.", and that "linked allocation (Section 2.2.3) is ideally suited
- * to insertion, since only a few links need to be changed."  However, the the
+ * to insertion, since only a few links need to be changed."  However, the
  * MIXAL program (Program L) on page 97 does not appear to utilize a traditonal
  * linked linear list structure (a series of nodes linked by addresses).
  *
@@ -361,6 +361,27 @@ void shellSort(int data[], int first, int n) {
          * subtraction operation.
          */
         h = h / 3;
+    }
+}
+
+void bubbleSort(int data[], int first, int n) {
+
+    int i, temp;
+    int lastIndex = first;
+    int size = n - 1;
+    
+    while (size > first) {
+
+        for (i = first; i < size; i++) {
+            if (data[i] > data[i + 1]) {
+                temp = data[i];
+                data[i] = data[i + 1];
+                data[i + 1] = temp;
+                lastIndex = i;
+            }
+        }
+        size = lastIndex;
+        lastIndex = first;
     }
 }
 

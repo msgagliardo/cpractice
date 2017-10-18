@@ -245,6 +245,7 @@ int main(void) {
     */
 
     int i;
+    /*
     for (i = 0; i < 1; i++)
         printf("%4d%s", knuth_one[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n");
@@ -260,6 +261,22 @@ int main(void) {
         printf("\n");
     }
     free(links);
+    */
+    bubbleSort(knuth, 0, 16);
+    for (i = 0; i < 16; i++)
+        printf("%4d%s", knuth[i], (0 == (i + 1) % 20) ? "\n": "");
+    printf("\n\n");
+
+    bubbleSort(knuth_sorted, 0, 16);
+    for (i = 0; i < 16; i++)
+        printf("%4d%s", knuth_sorted[i], (0 == (i + 1) % 20) ? "\n": "");
+    printf("\n\n");
+
+    bubbleSort(knuth_reversed, 0, 16);
+    for (i = 0; i < 16; i++)
+        printf("%4d%s", knuth_reversed[i], (0 == (i + 1) % 20) ? "\n": "");
+    printf("\n\n");
+
 
     return 0;
 }
