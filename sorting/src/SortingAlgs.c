@@ -114,6 +114,27 @@ void shellSort(int data[], int first, int n) {
     }
 }
 
+void bubbleSort(int data[], int first, int n) {
+
+    int i, temp;
+    int lastIndex = first;
+    int size = n - 1;
+
+    while (size > first) {
+
+        for (i = first; i < size; i++) {
+            if (data[i] > data[i + 1]) {
+                temp = data[i];
+                data[i] = data[i + 1];
+                data[i + 1] = temp;
+                lastIndex = i;
+            }
+        }
+        size = lastIndex;
+        lastIndex = first;
+    }
+}
+
 void merge(int data[], int first, int n1, int n2) {
 
     int temp[n1 + n2];
