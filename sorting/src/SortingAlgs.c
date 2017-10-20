@@ -118,11 +118,11 @@ void bubbleSort(int data[], int first, int n) {
 
     int i, temp;
     int lastIndex = first;
-    int size = n - 1;
+    int bound = n - 1;
 
-    while (size > first) {
+    while (bound > first) {
 
-        for (i = first; i < size; i++) {
+        for (i = first; i < bound; i++) {
             if (data[i] > data[i + 1]) {
                 temp = data[i];
                 data[i] = data[i + 1];
@@ -130,7 +130,7 @@ void bubbleSort(int data[], int first, int n) {
                 lastIndex = i;
             }
         }
-        size = lastIndex;
+        bound = lastIndex;
         lastIndex = first;
     }
 }
