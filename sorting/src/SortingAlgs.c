@@ -391,11 +391,11 @@ void bubbleSort(int data[], int first, int n) {
 
     int i, temp;
     int lastIndex = first;
-    int size = n - 1;
+    int bound = n - 1;
     
-    while (size > first) {
+    while (bound > first) {
 
-        for (i = first; i < size; i++) {
+        for (i = first; i < bound; i++) {
             if (data[i] > data[i + 1]) {
                 temp = data[i];
                 data[i] = data[i + 1];
@@ -408,13 +408,13 @@ void bubbleSort(int data[], int first, int n) {
             }
         }
         /* If there were exchanges that took place, 'lastIndex' will then be 
-         * set to the index of the last exchange, and 'size' will then be set
+         * set to the index of the last exchange, and 'bound' will then be set
          * equal to this value.  This will let us know how much of the list
          * we will have to traverse in the next for loop iteration.
          */
-        size = lastIndex;
+        bound = lastIndex;
         /* 'lastIndex' is set back to 'first' so that if no exchanges take place
-         * during the next for loop, 'size' will be equal to 'first' and the 
+         * during the next for loop, 'bound' will be equal to 'first' and the 
          * program will stop.
          */
         lastIndex = first;
