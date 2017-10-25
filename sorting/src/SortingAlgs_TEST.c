@@ -1,4 +1,5 @@
 /* A file for testing the algorithms developed in SortingAlgs.c. */
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 /* If you don't include the SortingAlgs.h header file, then you need to 
@@ -262,21 +263,21 @@ int main(void) {
     }
     free(links);
     */
-    bubbleSort(knuth, 0, 16);
+    mergeExchangeSort(knuth, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
 
-    bubbleSort(knuth_sorted, 0, 16);
+    mergeExchangeSort(knuth_sorted, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth_sorted[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
 
-    bubbleSort(knuth_reversed, 0, 16);
+    mergeExchangeSort(knuth_reversed, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth_reversed[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
 
-
+    
     return 0;
 }
