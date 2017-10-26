@@ -443,11 +443,13 @@ void mergeExchangeSort(int data[], int n) {
             d = p;
 
             while (1) {
-                for (i = 0; (i&p) == r && i < n - d ; i++) {
-                    if (data[i] > data[i + d]) {
-                        temp = data[i];
-                        data[i] = data[i + d];
-                        data[i + d] = temp;
+                for (i = 0; i < n - d ; i++) {
+                    if ((i&p) == r) {
+                        if (data[i] > data[i + d]) {
+                            temp = data[i];
+                            data[i] = data[i + d];
+                            data[i + d] = temp;
+                        }
                     }
                 }
                 if (q == p)
@@ -592,3 +594,26 @@ INT_NODE *linkedMergeSort(INT_NODE *pList) {
         return linkedMerge(linkedMergeSort(pList), linkedMergeSort(pList2));
     } 
 } 
+/*
+int main(void) {
+
+    double t, fractpart, intpart, eo2, dpo2;
+    int po2, i, q, r, d, p, temp;
+
+    t = log10(16) / log10(2);
+    if (modf(t, &intpart) != 0)
+        t = intpart + 1;
+    eo2 =  t - 1;
+    dpo2 = pow(2, eo2);
+    po2 = (int) dpo2;
+    p = 4;
+    d = p;
+    r = 0;
+
+    printf("p = %d\n", p);
+    for (i = 0; ((i&p) == r) && (i < (16 - d)); i++)
+        printf("i = %d\n", i);
+
+    return 0;
+}
+*/
