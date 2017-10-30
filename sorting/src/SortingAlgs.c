@@ -437,13 +437,12 @@ void mergeExchangeSort(int data[], int n) {
         p = po2;
 
         do {
-
             q = po2;
             r = 0;
             d = p;
 
             while (1) {
-                for (i = 0; i < n - d ; i++) {
+                for (i = 0; i < n - d; i++) {
                     if ((i&p) == r) {
                         if (data[i] > data[i + d]) {
                             temp = data[i];
@@ -459,7 +458,6 @@ void mergeExchangeSort(int data[], int n) {
                 r = p;
             }
             p = p / 2;
-            
         } while (p > 0);
     }
 }
