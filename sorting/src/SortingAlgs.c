@@ -151,7 +151,6 @@ void mergeExchangeSort(int data[], int n) {
         p = po2;
 
         do {
-
             q = po2;
             r = 0;
             d = p;
@@ -173,7 +172,6 @@ void mergeExchangeSort(int data[], int n) {
                 r = p;
             }
             p = p / 2;
-
         } while (p > 0);
     }
 }
