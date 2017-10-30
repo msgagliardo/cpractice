@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "SortingAlgs.h"
@@ -132,6 +133,48 @@ void bubbleSort(int data[], int first, int n) {
         }
         bound = lastIndex;
         lastIndex = first;
+    }
+}
+
+void mergeExchangeSort(int data[], int n) {
+
+    if (n > 1) {
+        double t, fractpart, intpart, eo2, dpo2;
+        int po2, i, q, r, d, p, temp;
+
+        t = log10(n) / log10(2);
+        if (modf(t, &intpart) != 0)
+            t = intpart + 1;
+        eo2 = t - 1;
+        dpo2 = pow(2, eo2);
+        po2 = (int) dpo2;
+        p = po2;
+
+        do {
+
+            q = po2;
+            r = 0;
+            d = p;
+
+            while (1) {
+                for (i = 0; i < n - d; i++) {
+                    if ((i&p) == r) {
+                        if (data[i] > data[i + d]) {
+                            temp = data[i];
+                            data[i] = data[i + d];
+                            data[i + d] = temp;
+                        }
+                    }
+                }
+                if (q == p)
+                    break;
+                d = q - p;
+                q = q / 2;
+                r = p;
+            }
+            p = p / 2;
+
+        } while (p > 0);
     }
 }
 
