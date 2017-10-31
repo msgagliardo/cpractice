@@ -139,12 +139,10 @@ void bubbleSort(int data[], int first, int n) {
 void mergeExchangeSort(int data[], int n) {
 
     if (n > 1) {
-        double t, fractpart, intpart, eo2, dpo2;
+        double t, eo2, dpo2;
         int po2, i, q, r, d, p, temp;
 
-        t = log10(n) / log10(2);
-        if (modf(t, &intpart) != 0)
-            t = intpart + 1;
+        t = ceil(log10(n) / log10(2));
         eo2 = t - 1;
         dpo2 = pow(2, eo2);
         po2 = (int) dpo2;
@@ -219,7 +217,7 @@ int partition(int data[], int first, int n) {
     while (high > low) {
         while (low < first + n && data[low] <= pivot)
             low++;
-        while (high >= first && data[high] > pivot)
+        while (high > first && data[high] >= pivot)
             high--;
 
         if (high > low) {
