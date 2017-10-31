@@ -422,13 +422,67 @@ void bubbleSort(int data[], int first, int n) {
     }
 }
 
+/* This method is also known as Batcher's parallel method and it is described 
+ * by Knuth on pg. 111 of TAOCP, Vol. 3.  It is similar to shellsort, but has 
+ * a worst-case running time of O(nlog^2(n)) which is in between O(n^1.5) and
+ * O(n^2).  
+ *
+ * If we're going to have an exchange algorithm whose running time is faster
+ * than order N^2, we need to select some nonadjacent pairs of keys for
+ * comparisons; otherwise we will need as many exchanges as the original 
+ * permutation has inversions, and the average number of inversions is 
+ * ((N^2) - N) / 4.  An ingeneous way to program a sequence of comparisons,
+ * looking for potential exchanges, was discovered in 1964 by K. E. Batcher.
+ *
+ * All comparisons/exchanges specified by a given iteration of the for loop can
+ * be done simultaneously, on computers or networks that allow parallel 
+ * computations.  With such parallel operations, sorting is completed in 
+ * 0.5ceil(lgN)*(ceil(lgN) + 1) steps, and this is about as fast as any general
+ * method known.  What are the average and best-case running times?
+ */
 void mergeExchangeSort(int data[], int n) {
 
     if (n > 1) {
         double t, fractpart, intpart, eo2, dpo2;
         int po2, i, q, r, d, p, temp;
 
+        /* 'log10' computes the common (base-10) logarithm of the argument.
+         * This function is defined in the math.h header file.  It takes a 
+         * double as an argument and returns a double.  Additionally, C99 adds
+         * 'log10f' which takes a float and returns a float, and 'log10l' which
+         * takes a long double and returns a long double.  Header <tgmath.h>
+         * provides a type-generic macro version of this function.  If the 
+         * argument is negative, a "domain error" is caused.  If the argument 
+         * is 0, it may cause a "pole error" (depending on the library 
+         * implementation).  If a "domain error" occurs, the global variable 
+         * 'errno' is set to 'EDOM'.  If a "pole error" occurs, the global 
+         * variable 'errno' is set to 'ERANGE'. 
+         *
+         * errno is a preprocessor macro that expands to a thread-local (since 
+         * C11) modifiable lvalue of type int. Several standard library 
+         * functions indicate errors by writing positive integers to errno. 
+         * Typically, the value of errno is set to one of the error codes listed
+         * in <errno.h> as macro constants beginning with the letter E followed
+         * by uppercase letters or digits. The value of errno is 0 at program 
+         * startup, and although library functions are allowed to write positive
+         * integers to errno whether or not an error occurred, library functions
+         * never store 0 in errno. Library functions perror and strerror can be
+         * used to obtain textual descriptions of the error conditions that 
+         * correspond to the current errno value.
+         *
+         * There is a 'log2' function, that I could have used instead of
+         * converting the base 10 logarithm of 'n' to the base 2 logarithm of
+         * 'n', but the 'log2' function is a C99 addition, so I decided to use
+         * 'log10' to make the code more portable.
+         */
         t = log10(n) / log10(2);
+        /* The 'modf' function of part of the <math.h> header file, and it takes
+         * a double, and a double* as arguments, and returns a double.  It
+         * breaks its first argument into an integral and a fractional part.  
+         * The integer part is stored in the object pointed to by the second
+         * argument, and the fractional part is returned by the function.  Both
+         * parts have the same sign as the first argument. 
+         */
         if (modf(t, &intpart) != 0)
             t = intpart + 1;
         eo2 =  t - 1;
@@ -515,7 +569,7 @@ int partition(int data[], int first, int n) {
     while (high > low) {
         while (low < first + n && data[low] <= pivot)
             low++;
-        while (high >= first && data[high] > pivot)
+        while (high > first && data[high] >= pivot)
             high--;
 
         if (high > low) {
