@@ -278,6 +278,7 @@ int main(void) {
         printf("%4d%s", knuth_reversed[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
 
+    printf("Ceil of 4.341 = %lf\n", ceil(4.341));
     
     return 0;
 }

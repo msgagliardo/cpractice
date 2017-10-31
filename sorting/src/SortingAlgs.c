@@ -443,7 +443,7 @@ void bubbleSort(int data[], int first, int n) {
 void mergeExchangeSort(int data[], int n) {
 
     if (n > 1) {
-        double t, fractpart, intpart, eo2, dpo2;
+        double t, intpart, eo2, dpo2;
         int po2, i, q, r, d, p, temp;
 
         /* 'log10' computes the common (base-10) logarithm of the argument.
@@ -481,7 +481,11 @@ void mergeExchangeSort(int data[], int n) {
          * breaks its first argument into an integral and a fractional part.  
          * The integer part is stored in the object pointed to by the second
          * argument, and the fractional part is returned by the function.  Both
-         * parts have the same sign as the first argument. 
+         * parts have the same sign as the first argument.  Alternatively, 
+         * you could simple use the 'ceil' function when calculating 't'.  Then
+         * you would not need to use the 'modf' function, and the if-statement
+         * below would not be necessary.  (See SortingAlgs.c on the master 
+         * branch).
          */
         if (modf(t, &intpart) != 0)
             t = intpart + 1;
