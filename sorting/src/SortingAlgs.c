@@ -501,6 +501,11 @@ void mergeExchangeSort(int data[], int n) {
 
             while (1) {
                 for (i = 0; i < n - d; i++) {
+                    /* The expression 'i&p' MUST BE IN PARENTHESES BECAUSE
+                     * the bitwise AND operator '&' has a lower precedence than
+                     * the relational equality operator '=='.  Without the 
+                     * parentheses, 'p == r' would be evaluated.
+                     */
                     if ((i&p) == r) {
                         if (data[i] > data[i + d]) {
                             temp = data[i];
@@ -601,6 +606,71 @@ void quickSort(int data[], int first, int n) {
         quickSort(data, pivotIndex + 1, n2);
     }
 } 
+
+void quick_sort(int data[], int n) {
+
+    if (n > 1) {
+        int m = 4;
+        int capacity = 0;
+        int size = 0;
+        int a = (n - 1) / 2;
+
+        while (a > m) {
+            capacity++;
+            a = (a - 1) / 2;
+        }
+
+        int stack[2 * capacity];
+        
+        int pivotIndex;
+        int n1, n2;
+        int low = 0;
+        int high = n - 1;
+        
+        while (1) {
+            do {
+                pivotIndex = partition(data, low, high - low + 1);
+                n1 = pivotIndex - low;
+                n2 = high - pivotIndex;
+
+                if (n1 >= n2) {
+                    if (n2 > m) {
+                        stack[size] = low;
+                        size++;
+                        stack[size] = pivotIndex - 1;
+                        size++;
+                        low = pivotIndex + 1;
+                    } else
+                        high = pivotIndex - 1;
+                } else {
+                    if (n1 > m) {
+                        stack[size] = pivotIndex + 1;
+                        size++;
+                        stack[size] = high;
+                        size++;
+                        high = pivotIndex - 1;
+                    } else
+                        low = pivotIndex + 1;
+                }
+            } while (n1 > m || n2 > m);
+
+            if (size <= 0) {
+                break;
+            }
+            else {
+                size--;
+                high = stack[size];
+                size--;
+                low = stack[size];
+            }
+        }
+        for (int i = 0; i < n; i++)
+            printf("%4d%s", data[i], (0 == (i + 1) % 20) ? "\n": "");
+        printf("\n");
+        insertionSort(data, 0, n);
+    }
+}
+              
 /* the split function is needed when you are using a linked list because 
  * we cannot do the splitting inside the mergeSort function simply by 
  * passing the size as an argument and dividing it by 2.  This is because 
