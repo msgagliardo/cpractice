@@ -627,12 +627,13 @@ void quick_sort(int data[], int n) {
         int low = 0;
         int high = n - 1;
         
-        while (1) {
-            do {
+        while (1) { 
                 pivotIndex = partition(data, low, high - low + 1);
                 n1 = pivotIndex - low;
                 n2 = high - pivotIndex;
 
+            while (n1 > m || n2 > m) {
+                
                 if (n1 >= n2) {
                     if (n2 > m) {
                         stack[size] = low;
@@ -652,8 +653,11 @@ void quick_sort(int data[], int n) {
                     } else
                         low = pivotIndex + 1;
                 }
-            } while (n1 > m || n2 > m);
+                pivotIndex = partition(data, low, high - low + 1);
+                n1 = pivotIndex - low;
+                n2 = high - pivotIndex;
 
+            } 
             if (size <= 0) {
                 break;
             }
