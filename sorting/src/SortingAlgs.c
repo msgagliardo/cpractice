@@ -246,6 +246,29 @@ void quickSort(int data[], int first, int n) {
     }
 } 
 
+void quick_sort(int data[], int first, int n) {
+
+    if (n > 1) {
+        int m = 9;
+        int capacity = 0;
+        int size = 0;
+        int a = (n - 1 - first) / 2;
+
+        while (a > m) {
+            capacity++;
+            a = (a - 1 - first) / 2;
+        }
+
+        int stack[2 * capacity];
+
+        int pivotIndex;
+        int n1, n2;
+        int low = first;
+        int high = n - 1;
+
+        while (1) {
+            
+
 INT_NODE *split(INT_NODE *pList) {
 
     INT_NODE *pList2;
