@@ -86,7 +86,7 @@ int main(void) {
 
     int i, j;
     int n = 16;
-
+/*
     for (i = 0; i < n; i++)
         printf("%4d%s", knuth[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n");
@@ -118,6 +118,7 @@ int main(void) {
 
     for (i = 0; i < 4; i++)
         free(links[i]);
+*/
 
     return 0;
 }

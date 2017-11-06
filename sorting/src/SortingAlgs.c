@@ -209,18 +209,48 @@ void mergeSort(int data[], int first, int n) {
 
 int partition(int data[], int first, int n) {
 
-    int pivot = data[first];
     int low = first + 1;
     int high = first + n - 1;
+    int middle = (high + first) / 2;
+    int pivot, pivotIndex;
     int temp;
 
+    if (data[first] <= data[middle]) {
+        if (data[middle] <= data[high]) {
+            pivot = data[middle];
+            pivotIndex = middle;
+        } else if (data[first] <= data[high]) {
+            pivot = data[high];
+            pivotIndex = high;
+        } else {
+            pivot = data[first];
+            pivotIndex = first;
+        }
+    } else {
+        if (data[middle] >= data[high]) {
+            pivot = data[middle];
+            pivotIndex = middle;
+        } else if (data[first] >= data[high]) {
+            pivot = data[high];
+            pivotIndex = high;
+        } else {
+            pivot = data[first];
+            pivotIndex = first;
+        }
+    }
+
+    if (pivotIndex != first) {
+        data[pivotIndex] = data[first];
+        data[first] = pivot;
+    }
+
     while (high > low) {
-        while (low < first + n && data[low] <= pivot)
+        while (low < first + n && data[low] < pivot)
             low++;
-        while (high > first && data[high] >= pivot)
+        while (high >= first && data[high] > pivot)
             high--;
 
-        if (high > low) {
+        if (high > low && data[high] < data[low]) {
             temp = data[low];
             data[low] = data[high];
             data[high] = temp;
@@ -264,8 +294,69 @@ void quick_sort(int data[], int first, int n) {
         int low = first;
         int high = n - 1;
 
-        while (1) {
-            
+        if (0 == capacity) {
+            pivotIndex = partition(data, low, high - low + 1);
+            n1 = pivotIndex - low;
+            n2 = high - pivotIndex;
+
+            while (n1 > m || n2 > m) {
+                if (n1 > m)
+                    high = pivotIndex - 1;
+                else if (n2 > m)
+                    low = pivotIndex + 1;
+
+                pivotIndex = partition(data, low, high - low + 1);
+                n1 = pivotIndex - low;
+                n2 = high - pivotIndex;
+            }
+
+        } else {
+
+            int stack[2 * capacity];
+
+            while (1) {
+                pivotIndex = partition(data, low, high - low + 1);
+                n1 = pivotIndex - low;
+                n2 = high - pivotIndex;
+
+                while (n1 > m || n2 > m) {
+                    
+                    if (n1 >= n2) {
+                        if (n2 > m) {
+                            stack[size] = low;
+                            size++;
+                            stack[size] = pivotIndex - 1;
+                            size++;
+                            low = pivotIndex + 1;
+                        } else
+                            high = pivotIndex - 1;
+                    } else {
+                        if (n1 > m) {
+                            stack[size] = pivotIndex + 1;
+                            size++;
+                            stack[size] = high;
+                            size++;
+                            high = pivotIndex - 1;
+                        } else
+                            low = pivotIndex + 1;
+                    }
+                    pivotIndex = partition(data, low, high - low + 1);
+                    n1 = pivotIndex - low;
+                    n2 = high - pivotIndex;
+                }
+                if (size <= 0)
+                    break;
+                else {
+                    size--;
+                    high = stack[size];
+                    size--;
+                    low = stack[size];
+                }
+            }
+        }
+        insertionSort(data, first, n);
+    }
+}
 
 INT_NODE *split(INT_NODE *pList) {
 
