@@ -248,7 +248,7 @@ void quickSort(int data[], int first, int n) {
 
 void quick_sort(int data[], int first, int n) {
 
-    if (n > 1) {
+    if (n > 1 && first < n - 1) {
         int m = 9;
         int capacity = 0;
         int size = 0;
@@ -258,8 +258,6 @@ void quick_sort(int data[], int first, int n) {
             capacity++;
             a = (a - 1 - first) / 2;
         }
-
-        int stack[2 * capacity];
 
         int pivotIndex;
         int n1, n2;
