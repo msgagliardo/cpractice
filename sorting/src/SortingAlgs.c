@@ -684,8 +684,8 @@ void quickSort(int data[], int first, int n) {
  */
 void quick_sort(int data[], int first, int n) {
 
-    if (n > 1) {
-        int m = 2;
+    if (n > 1 && first < n - 1) {
+        int m = 4;
         int capacity = 0;
         int size = 0;
         int a = (n - 1 - first) / 2;
@@ -694,53 +694,68 @@ void quick_sort(int data[], int first, int n) {
             capacity++;
             a = (a - 1 - first) / 2;
         }
-
-        int stack[2 * capacity];
         
         int pivotIndex;
-        int n1, n2;
+        int n1 = n;
+        int n2 = 0;
         int low = first;
         int high = n - 1;
-        
-        while (1) { 
-                pivotIndex = partition(data, low, high - low + 1);
-                n1 = pivotIndex - low;
-                n2 = high - pivotIndex;
+
+        if (0 == capacity) {
 
             while (n1 > m || n2 > m) {
-                
-                if (n1 >= n2) {
-                    if (n2 > m) {
-                        stack[size] = low;
-                        size++;
-                        stack[size] = pivotIndex - 1;
-                        size++;
-                        low = pivotIndex + 1;
-                    } else
-                        high = pivotIndex - 1;
-                } else {
-                    if (n1 > m) {
-                        stack[size] = pivotIndex + 1;
-                        size++;
-                        stack[size] = high;
-                        size++;
-                        high = pivotIndex - 1;
-                    } else
-                        low = pivotIndex + 1;
-                }
                 pivotIndex = partition(data, low, high - low + 1);
                 n1 = pivotIndex - low;
                 n2 = high - pivotIndex;
 
-            } 
-            if (size <= 0) {
-                break;
+                if (n1 > m)
+                    high = pivotIndex - 1;
+                else if (n2 > m)
+                    low = pivotIndex + 1;
             }
-            else {
-                size--;
-                high = stack[size];
-                size--;
-                low = stack[size];
+
+        } else {
+
+            int stack[2 * capacity];
+        
+            while (1) { 
+                pivotIndex = partition(data, low, high - low + 1);
+                n1 = pivotIndex - low;
+                n2 = high - pivotIndex;
+
+                while (n1 > m || n2 > m) {
+                    
+                    if (n1 >= n2) {
+                        if (n2 > m) {
+                            stack[size] = low;
+                            size++;
+                            stack[size] = pivotIndex - 1;
+                            size++;
+                            low = pivotIndex + 1;
+                        } else
+                            high = pivotIndex - 1;
+                    } else {
+                        if (n1 > m) {
+                            stack[size] = pivotIndex + 1;
+                            size++;
+                            stack[size] = high;
+                            size++;
+                            high = pivotIndex - 1;
+                        } else
+                            low = pivotIndex + 1;
+                    }
+                    pivotIndex = partition(data, low, high - low + 1);
+                    n1 = pivotIndex - low;
+                    n2 = high - pivotIndex;
+                } 
+                if (size <= 0) 
+                    break;
+                else {
+                    size--;
+                    high = stack[size];
+                    size--;
+                    low = stack[size];
+                }
             }
         }
         for (int i = first; i < n; i++)
