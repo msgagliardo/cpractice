@@ -696,22 +696,24 @@ void quick_sort(int data[], int first, int n) {
         }
         
         int pivotIndex;
-        int n1 = n;
-        int n2 = 0;
+        int n1, n2;
         int low = first;
         int high = n - 1;
 
         if (0 == capacity) {
+            pivotIndex = partition(data, low, high - low + 1);
+            n1 = pivotIndex - low;
+            n2 = high - pivotIndex;
 
             while (n1 > m || n2 > m) {
-                pivotIndex = partition(data, low, high - low + 1);
-                n1 = pivotIndex - low;
-                n2 = high - pivotIndex;
-
                 if (n1 > m)
                     high = pivotIndex - 1;
                 else if (n2 > m)
                     low = pivotIndex + 1;
+
+                pivotIndex = partition(data, low, high - low + 1);
+                n1 = pivotIndex - low;
+                n2 = high - pivotIndex;
             }
 
         } else {
