@@ -258,22 +258,22 @@ int main(void) {
         printf("\n\n");
 
         for (i = 0; links[i] >= 0; i = links[i] + 1)
-            printf("%4d%s", knuth_one[links[i]], (0 == (i + 1) % 20) ? "\n": "");
+            printf("%4d%s", knuth_one[links[i]], (0 == (i + 1) % 20) ? "\n": "");    
         printf("\n");
     }
     free(links);
     */
-    quick_sort(knuth, 16);
+    quickSort(knuth, 0, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
 
-    quick_sort(knuth_sorted, 16);
+    quickSort(knuth_sorted, 0, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth_sorted[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
 
-    quick_sort(knuth_reversed, 16);
+    quickSort(knuth_reversed, 0, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth_reversed[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");

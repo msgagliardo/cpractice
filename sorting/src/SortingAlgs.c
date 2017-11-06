@@ -424,7 +424,7 @@ void bubbleSort(int data[], int first, int n) {
 
 /* This method is also known as Batcher's parallel method and it is described 
  * by Knuth on pg. 111 of TAOCP, Vol. 3.  It is similar to shellsort, but has 
- * a worst-case running time of O(nlog^2(n)) which is in between O(n^1.5) and
+ * a worst-case running time of O(nlog^2(n)) which is in between O(n^1.5) and       
  * O(n^2).  
  *
  * If we're going to have an exchange algorithm whose running time is faster
@@ -570,17 +570,47 @@ void mergeSort(int data[], int first, int n) {
 
 int partition(int data[], int first, int n) {
 
-    int pivot = data[first];
     int low = first + 1;
     int high = first + n - 1;
+    int middle = (high + first) / 2;
+    int pivot, pivotIndex;
     int temp;
 
-    while (high > low) {
-        while (low < first + n && data[low] < pivot)
-            low++;
-        while (high > first && data[high] > pivot)
-            high--;
+    if (data[first] <= data[middle]) {
+        if (data[middle] <= data[high]) {
+            pivot = data[middle];
+            pivotIndex = middle;
+        } else if (data[first] <= data[high]) {
+            pivot = data[high];
+            pivotIndex = high;
+        } else {
+            pivot = data[first];
+            pivotIndex = first;
+        }
+    } else {
+        if (data[middle] >= data[high]) {
+            pivot = data[middle];
+            pivotIndex = middle;
+        } else if (data[first] >= data[high]) {
+            pivot = data[high];
+            pivotIndex = high;
+        } else {
+            pivot = data[first];
+            pivotIndex = first;
+        }
+    }
 
+    data[pivotIndex] = data[first];
+    data[first] = pivot;
+    printf("pivot = %d\n", pivot);
+
+    while (high > low) {
+        while (low < first + n && data[low] < pivot) 
+            low++;
+        
+        while (high >= first && data[high] > pivot) 
+            high--;
+        
         if (high > low && data[high] < data[low]) {
             temp = data[low];
             data[low] = data[high];
