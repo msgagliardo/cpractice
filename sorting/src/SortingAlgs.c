@@ -637,24 +637,69 @@ void quickSort(int data[], int first, int n) {
     }
 } 
 
-void quick_sort(int data[], int n) {
+/* This is an implementation of the quicksort method that is presented by Knuth
+ * on page 113 of Vol. 3 of TAOCP.  The main difference between Knuth's method,
+ * and the 'quickSort()' implementation above, is that Knuth's quicksort is not
+ * recursive.  Instead, Knuth uses a stack data structure to keep track of the
+ * boundary indices of the partitions.  Stacks are often used to save 
+ * information instead of using recursive calls which saves that information in
+ * the form of an activation record on the runtime stack (For example, 
+ * depth-first search can be implemented recursively or using a stack).  Stacks
+ * may be preferable to the recursive implementation when only a small amount 
+ * of information needs to be saved.  This is the case with this quicksort 
+ * implementation because we only need to save two integers for each partition.
+ *
+ * In Knuth's MIXAL program implementation of quicksort, he uses two 6-bit bytes
+ * in the same memory word (see the description of the MIX computer in Vol. 1 of
+ * TAOCP) to store the indices of each partition.  As a result, he only does 
+ * one push operation onto the stack for each partition.  I could have achieved
+ * this same behavior in C if I created a new struct that just consisted of two
+ * ints (the lower and upper indices).  Then I could just create a new struct
+ * for each partition that needs to be pushed, and just push that new struct
+ * onto my stack data structure.  I chose not to do that because the structs
+ * would be very simple structures and the stack size never gets very large
+ * even for very large values of 'n' (for example, even for 1 billion elements
+ * the maximum stack size is only around 30 pairs of indices).  For each 
+ * partition, the left index is pushed first, and the right index second.  
+ * When partitions need to be removed from the stack, the right index is 
+ * removed first, followed by the left index.
+ *
+ * This also differs from Knuth's implementation because it doesn't use what
+ * Knuth calls "artificial keys."  Knuth places a key that is less than any
+ * key in the input (greatest negative number that MIX can hold), and places
+ * it one index before the first index in the input data.  He also
+ * places a key that is greater than any key in the input (greatest positive 
+ * number that MIX can hold) one index after the last index in the input data.
+ * Instead of doing this, I simply check in the while conditions of the 
+ * partition() function to make sure that the 'low' and 'high' indices are 
+ * valid indices in the current partition.
+ *
+ * Last, but not least, Knuth's implementation utilizes a threshold value, 'm',
+ * that indicates the partition sizes at which quicksort will end, and a single
+ * pass of insertionsort will finish the sorting.  Knuth says that the optimal
+ * value of 'm' differs for different machines, but is generally around 9.  IF
+ * 'm' is given the value of 1, quicksort completely sorts the data, and 
+ * insertionsort is run on a completely sorted array.  For this reason, 'm' is
+ * usually set to a value > 1.  
+ */
+void quick_sort(int data[], int first, int n) {
 
     if (n > 1) {
-        int m = 4;
+        int m = 2;
         int capacity = 0;
         int size = 0;
-        int a = (n - 1) / 2;
+        int a = (n - 1 - first) / 2;
 
         while (a > m) {
             capacity++;
-            a = (a - 1) / 2;
+            a = (a - 1 - first) / 2;
         }
 
         int stack[2 * capacity];
         
         int pivotIndex;
         int n1, n2;
-        int low = 0;
+        int low = first;
         int high = n - 1;
         
         while (1) { 
@@ -698,10 +743,10 @@ void quick_sort(int data[], int n) {
                 low = stack[size];
             }
         }
-        for (int i = 0; i < n; i++)
+        for (int i = first; i < n; i++)
             printf("%4d%s", data[i], (0 == (i + 1) % 20) ? "\n": "");
         printf("\n");
-        insertionSort(data, 0, n);
+        insertionSort(data, first, n);
     }
 }
               

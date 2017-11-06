@@ -263,17 +263,17 @@ int main(void) {
     }
     free(links);
     */
-    quickSort(knuth, 0, 16);
+    quick_sort(knuth, 0, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
 
-    quickSort(knuth_sorted, 0, 16);
+    quick_sort(knuth_sorted, 0, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth_sorted[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
 
-    quickSort(knuth_reversed, 0, 16);
+    quick_sort(knuth_reversed, 0, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth_reversed[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
