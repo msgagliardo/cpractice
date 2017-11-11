@@ -247,7 +247,7 @@ int partition(int data[], int first, int n) {
     while (high > low) {
         while (low < first + n && data[low] < pivot)
             low++;
-        while (high >= first && data[high] > pivot)
+        while (high > first && data[high] > pivot)
             high--;
 
         if (high > low && data[high] < data[low]) {
@@ -344,7 +344,7 @@ void quick_sort(int data[], int first, int n) {
                     n1 = pivotIndex - low;
                     n2 = high - pivotIndex;
                 }
-                if (size <= 0)
+                if (size == 0)
                     break;
                 else {
                     size--;
