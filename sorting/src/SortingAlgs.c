@@ -568,6 +568,15 @@ void mergeSort(int data[], int first, int n) {
     }
 }
 
+/* This partition function was initially written for use with the quickSort()
+ * recursive function, but it can also be used with the nonrecursive
+ * quick_sort() function.  It was modified, however, to use what Knuth calls,
+ * "median of three" paritioning.  This means that it no longer uses the first
+ * element in a partition as the pivot element.  Instead, it uses the median of
+ * the first element in the partition, the last element in the partition, and 
+ * the middle element of the partition (the element at index 
+ * (high + low) / 2).  as the pivot element.
+ */
 int partition(int data[], int first, int n) {
 
     int low = first + 1;
@@ -576,6 +585,9 @@ int partition(int data[], int first, int n) {
     int pivot, pivotIndex;
     int temp;
 
+    /* Code for calculating the "median of three" pivot element.  Is there an 
+     * easier way to do this that involves less code?
+     */
     if (data[first] <= data[middle]) {
         if (data[middle] <= data[high]) {
             pivot = data[middle];
@@ -600,15 +612,64 @@ int partition(int data[], int first, int n) {
         }
     }
 
+    /* The importance of the next two statements is not immediately obvious.  
+     * Whatever the 'pivotIndex' turns out to be--either first, middle, or high
+     * --the pivot element must be switch with the first element so that it 
+     * is not included in the comparisons of the inner while loops.  OTHERWISE
+     * ELEMENT DUPLICATION MAY OCCUR.  For example, if this is your input data,
+     * [5 2 6 1 8 7 3 9 10 13 11 18 12 4 16 17 15 20 14 19] and 13 is your pivot
+     * you will end up with the following list;
+     * [12 2 6 1 8 7 3 9 10 4 11 13 18 13 16 17 15 20 14 19] 
+     * In this situation, the 13 has been duplicated, and the 5 has been removed
+     * entirely.
+     */
     data[pivotIndex] = data[first];
     data[first] = pivot;
+    /* This was just here so I could check if the pivot element was chosen
+     * correctly.
+     */
     printf("pivot = %d\n", pivot);
 
     while (high > low) {
+        /* I initially had "data[low] <= pivot" and "data[high] >= pivot", but 
+         * This idea of using < and > is due to R. C. Singleton, and it keeps 
+         * the inner loops fast and helps to split subfiles nearly in half when
+         * equal elements are present. For example, say you have a list whose 
+         * first half contains all the same element, and the second half 
+         * contains elements that are less than that element.  
+         *
+         * [5 5 5 5 5 5 4 3 2 1 0]  n = 11
+         *
+         * In this case, if you choose the first element as the pivot, or use
+         * "median of three" partitioning, you will end up with a 5 as the 
+         * pivot.  If you use <= and >=, 'low' will end up with a value of 11
+         * (not a valid index) and 'high' will end up with a value of 10.  Then
+         * the 0 and the first 5 will switch places and you will end up with the
+         * following list;
+         *
+         * [[0 5 5 5 5 5 4 3 2 1]] 5]  n1 = 10  n2 = 0 
+         *
+         * These are horrible partitions of size 'n - 1' and '0'.  While if you
+         * use < and > you will end up with the following list;
+         *
+         * [[4 0 1 2 3] 5 [5 5 5 5 5]]  n1 = 5  n2 = 5
+         *
+         * Also, in this while loop expression, it is possible for 'low' to have
+         * an index that is one greater than the greatest index of the
+         * partition (if the whole array is being partitioned, and not a 
+         * subarray, then 'low' will be an invalid index if it is one greater
+         * than the last index in 'data').  However, since 'high' starts at the
+         * last index, whenever 'low' has this invalid index, 'high' will
+         * always be less than 'low', therefore the code to swap (interchange)
+         * the two elements at 'low' and 'high' in the 'if statement' will never
+         * run.  Also, since all array accesses occur after the '&&'
+         * short-circuit AND logical operator, only the first relational 
+         * expression in the while loop condition will run.
+         */
         while (low < first + n && data[low] < pivot) 
             low++;
         
-        while (high >= first && data[high] > pivot) 
+        while (high > first && data[high] > pivot) 
             high--;
         
         if (high > low && data[high] < data[low]) {
@@ -681,16 +742,75 @@ void quickSort(int data[], int first, int n) {
  * 'm' is given the value of 1, quicksort completely sorts the data, and 
  * insertionsort is run on a completely sorted array.  For this reason, 'm' is
  * usually set to a value > 1.  
+ *
+ * Average and best-case running time for quick sort is O(nlogn).  The worst
+ * case running time occurs when the list is ALREADY SORTED (and reverse sorted?
+ * ) and it is O(n^2)
  */
 void quick_sort(int data[], int first, int n) {
 
+    /* If 'n' is equal to 1, OR 'first' is equal to 'n - 1', that means that 
+     * we are sorting only one element, and one element is already 'sorted'
+     * so, we do nothing.
+     */
     if (n > 1 && first < n - 1) {
+        /* 'm' is the threshold size of the partitions for switching over to 
+         * insertion sort.  If the partition() function is run, and either of
+         * the partitions is found to be <= 'm', that subarray is not 
+         * partitioned any further.  If it is still out of order, the call to 
+         * insertion sort at the end of this function will finish the sorting.
+         * Knuth says that the optimal value of 'm' is around 9.
+         */
         int m = 4;
+        /* 'capacity' is the size of the stack (array) that will be allocated 
+         * to hold the bounds of the partitions.
+         */
         int capacity = 0;
+        /* The 'size' variable is used to keep track of how many indices are on
+         * the stack.
+         */
         int size = 0;
+        /* 'a' is a 'placeholder' variable that is simply used to find the final
+         * value of the 'capacity' variable.  I therefore did not give it a 
+         * descriptive name.
+         */
         int a = (n - 1 - first) / 2;
 
         while (a > m) {
+            /* The first thing to realize when trying to determine the maximum 
+             * pairs of indices that will be pushed onto the stack during the 
+             * course of the program, and therefore the capacity of the stack
+             * is that NO MATTER HOW MANY ELEMENTS THE INPUT HAS, NOTHING WILL
+             * BE PUSHED ONTO THE STACK IF ONE OR MORE PARTITIONS ARE PRODUCED
+             * WHOSE SIZE IS >= 'm'.  
+             *
+             * The minimum size of the input array for a push operation to 
+             * occur for a value of 'm' >= 0 is 2M + 3.  And this only occurs
+             * when the partition() function EVENLY splits the array into two
+             * halves.  For example, when 'm = 4', the minimum array size 
+             * needed for a pair of indices to be pushed onto the stack is 
+             * 11.  This occurs when the partition function splits the input
+             * into two 5 element subarrays.  If any other size partitions are
+             * created, no push operation will occur.  For example, if the two
+             * partitions are size 4 and size 6, one partition will be > 'm', 
+             * but the other one is equal to 'm'.  Therefore, partitioning 
+             * should stop on the 4 element subarray, and partitioning will
+             * begin on the 6 element subarray without a push operation.  When
+             * 'm = 4', the minimum size for the input data for which two push
+             * operations will occur is therefore, twice the first value (11)
+             * plus 1 to account for removal of the pivot element.  Therefore,
+             * when 'm = 4', the minimun number of elements in the input data
+             * that are needed for 2 pairs of indices to be pushed onto the 
+             * stack is 23.
+             *
+             * NOTE: The maximum size of the stack may be less than the capacity
+             * that is set here.  For example, nothing will ever be pushed onto
+             * the stack if the partition() function always splits the array 
+             * into one partition that has a size that is '<= m'.  Therefore, 
+             * it can be seen that the size of the stack is determined by the 
+             * partition that produces the most consecutive pushes onto the
+             * stack without a pop operation.
+             */
             capacity++;
             a = (a - 1 - first) / 2;
         }
@@ -700,7 +820,19 @@ void quick_sort(int data[], int first, int n) {
         int low = first;
         int high = n - 1;
 
+        /* If the capacity of the stack is 0 then there will not be any push
+         * operations, but there will be at least one partition operation.  This
+         * partitioning helps to speed up the insertion sort at the end of the 
+         * function, unless of course, the input consists of just two elements,
+         * in which case the data will already be sorted before the call to 
+         * insertion sort happens.
+         */
         if (0 == capacity) {
+            /* I decided to use the same partition function that I created for
+             * the recursive quickSort() function above.  I had to calculate 
+             * the partition size from the 'high' and 'low' indices for the 
+             * third argument.
+             */
             pivotIndex = partition(data, low, high - low + 1);
             n1 = pivotIndex - low;
             n2 = high - pivotIndex;
@@ -708,6 +840,9 @@ void quick_sort(int data[], int first, int n) {
             while (n1 > m || n2 > m) {
                 if (n1 > m)
                     high = pivotIndex - 1;
+                /* This clause must be an 'else if' and not an 'else' otherwise
+                 * it would be called even if both partitions are <= m.
+                 */
                 else if (n2 > m)
                     low = pivotIndex + 1;
 
@@ -718,6 +853,16 @@ void quick_sort(int data[], int first, int n) {
 
         } else {
 
+            /* I initially had the allocation of this array outside of this
+             * if statement and inside its own 'if statement' whose logical
+             * expression read "0 != capacity".  However, this caused an ERROR
+             * during compilation.  The reason for this is that the code in the
+             * inner while loop below attemps to index into the array.  The 
+             * compiler sees this as an error because IT CAN NOT KNOW THAT THE
+             * THAT THE CODE THAT ATTEMPTS TO ACCESS THE ARRAY WILL NEVER BE
+             * CALLED IF 'capacity == 0'.  As humans we can see that this is 
+             * implied, but a computer must be told everything explicitly. 
+             */
             int stack[2 * capacity];
         
             while (1) { 
@@ -750,7 +895,15 @@ void quick_sort(int data[], int first, int n) {
                     n1 = pivotIndex - low;
                     n2 = high - pivotIndex;
                 } 
-                if (size <= 0) 
+                /* If both of the subarrays from the last partition() operation
+                 * are < m, then check to see if there are any partition indices
+                 * on the stack.  If there are, these indices are popped off the
+                 * stack.  The first one popped is set as the 'high' index, and
+                 * the second one popped is set as the 'low' index.  Then the 
+                 * infinite while loop continues; if not, the the break 
+                 * statement ends the infinite outer while loop.
+                 */
+                if (size == 0) 
                     break;
                 else {
                     size--;
@@ -760,6 +913,9 @@ void quick_sort(int data[], int first, int n) {
                 }
             }
         }
+        /* I just added this to see how the data would loop right before 
+         * insertion sort is called.
+         */
         for (int i = first; i < n; i++)
             printf("%4d%s", data[i], (0 == (i + 1) % 20) ? "\n": "");
         printf("\n");
