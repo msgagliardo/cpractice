@@ -680,6 +680,11 @@ int partition(int data[], int first, int n) {
             high--;
         }
     }
+    /* In TAOCP, Knuth unconditionally switches 'data[high]' and 'pivot'.  You
+     * can safely do this because 'high' will only ever stop on an element that
+     * is <= 'pivot'.  Is the method faster without this check? (He also 
+     * always assumes that the elements are distinct).
+     */
     if (data[high] < pivot) {
         data[first] = data[high];
         data[high] = pivot;
