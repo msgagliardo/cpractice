@@ -26,6 +26,7 @@ void mergeSort(int data[], int first, int n);
 int partition(int data[], int first, int n);
 void quickSort(int data[], int first, int n);
 void quick_sort(int data[], int first, int n);
+void radixExchangeSort(int data[], int n);
 INT_NODE *split(INT_NODE *pList);
 INT_NODE *linkedMerge(INT_NODE *pList, INT_NODE *pList2);
 INT_NODE *linkedMergeSort(INT_NODE *pList);
