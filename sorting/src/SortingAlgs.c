@@ -358,6 +358,68 @@ void quick_sort(int data[], int first, int n) {
     }
 }
 
+void radixExchangeSort(int data[], int n) {
+    
+    int L = 0;
+    int r = n - 1;
+    int b = 1;
+    int m = sizeof(int) * 8;
+    int stack[2 * (m - 1)];
+    int size = 0;
+    int i, j, temp;
+
+    while (1) {
+        while (L < r) {
+            i = L;
+            j = r;
+
+            do {
+                while (i <= j && ((data[i] >> m - b) % 2 == 0))
+                    i++;
+
+                if (i > j)
+                    break;
+
+                j--;
+                while (i <= j && ((data[j + 1] >> m - b) % 2 == 1))
+                    j--;
+
+                if (i <= j) {
+                    temp = data[i];
+                    data[i] = data[j + 1];
+                    data[j + 1] = temp;
+                    i++;
+                }
+            } while (i <= j);
+
+            b++;
+            if (b > m)
+                break;
+            else if (j < L || j == r)
+                continue;
+            else if (j == L) {
+                L++;
+                continue;
+            } else {
+                stack[size] = r;
+                size++;
+                stack[size] = b;
+                size++;
+                r = j;
+            }
+        }
+        if (0 == size)
+            break;
+        else {
+            L = r + 1;
+            size--;
+            b = stack[size];
+            size--;
+            r = stack[size];
+        }
+    }
+}
+
 INT_NODE *split(INT_NODE *pList) {
 
     INT_NODE *pList2;
