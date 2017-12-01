@@ -189,6 +189,10 @@ int main(void) {
 
     int knuth_reversed[16] = {908, 897, 765, 703, 677, 653, 612, 512,
                               509, 503, 426, 275, 170, 154, 87, 61};
+
+    int knuth_same[16] = {908, 908, 908, 908, 908, 908, 908, 908,
+                          908, 908, 908, 908, 908, 908, 908, 908};
+
     int knuth_one[1] = {908};
     /*
     3 [11, 10, 12, 1, -1, 7, 4, 9, 13, 11, 5, 2, 8, 15, 6, 14] 
@@ -277,6 +281,15 @@ int main(void) {
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth_reversed[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
+
+    radixExchangeSort(knuth_same, 16);
+    for (i = 0; i < 16; i++)
+        printf("%4d%s", knuth_same[i], (0 == (i + 1) % 20) ? "\n": "");
+    printf("\n\n");
+
+    radixExchangeSort(knuth_one, 1);
+    printf("%4d\n", knuth_one[0]);
+    printf("\n");
 
     printf("Ceil of 4.341 = %lf\n", ceil(4.341));
     

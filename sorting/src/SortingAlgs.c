@@ -930,128 +930,136 @@ void quick_sort(int data[], int first, int n) {
 
 void radixExchangeSort(int data[], int n) {
     
-    int L = 0;
-    int r = n - 1;
-    int b = 1;
-    /* The number of bits in an 'int' for the C implementation that this 
-     * code is running on.  On this 2015 MacBook Pro, 'bits' would receive a 
-     * value of 32.
-     */
-    int size = 0;
-    int i, j, temp;
-    /* 'm' is the threshold value for switching to insertion sort, as it was
-     * for quick_sort() above.
-     */
-    int m = 9;
-    int max = data[0];
+    if (n > 1) {
 
-    for (i = 1; i < n; i++) {
-        if (data[i] > max)
-            max = data[i];
-    }
-    int bits = log10(max) / log10(2) + 1;
-    int stack[2 * (bits - 1)];
+        int L = 0;
+        int r = n - 1;
+        int b = 1;
+        /* The number of bits in an 'int' for the C implementation that this 
+         * code is running on.  On this 2015 MacBook Pro, 'bits' would receive
+         * a value of 32.
+         */
+        int size = 0;
+        int i, j, temp;
+        /* 'm' is the threshold value for switching to insertion sort, as it 
+         * was for quick_sort() above.
+         */
+        int m = 9;
+        int max = data[0];
 
-    while (1) {
-        while (r - L > m) {
-
-            for (i = L; i < r && data[i] == data[i + 1]; i++)
-                continue;
-
-            /* If this relational expression is true, then there are at least
-             * two different values for the keys in between 'L' and 'r'
-             */
-            if (i < r) {
-                i = L;
-                j = r;
-
-                do {
-                    /* text says to check the bit value before the 'i <= j' 
-                     * check 
-                     */ 
-
-                    /* Keep in mind that '-' has a higher precedence than 
-                     * '>>' or '<<'.  The operator precedence for the 7 
-                     * operators in this logical expression is;
-                     *
-                     * "[] % - >> <= == &&"
-                     *
-                     * from highest precedence on the left, to lowest
-                     * precedence on the right.  The operations are done in 
-                     * the following order, however;
-                     *
-                     * "<= [] - >> % == &&"
-                     *
-                     * with the first operation on the left, and the last
-                     * operation on the right.  Think about why this is.
-                     *
-                     * Therefore, the following expression uses the minimum
-                     * set of parentheses.  It would, however, be much easier
-                     * to read if more parentheses were used so that one would
-                     * not have to look up the operator precedence. In fact,
-                     * you will get a compiler warning saying that '-' has
-                     * a higher precedence than '>>' and to used parentheses
-                     * around the '-' operation to silence the warning.
-                     */ 
-                    while (i <= j && (data[i] >> bits - b) % 2 == 0)
-                        i++;
-
-                    j--;
-                    while (i <= j && (data[j + 1] >> bits - b) % 2 == 1)
-                        j--;
-
-                    if (i <= j) {
-                        temp = data[i];
-                        data[i] = data[j + 1];
-                        data[j + 1] = temp;
-                        i++;
-                    } 
-                } while (i <= j);
-                
-                b++;
-                /* "This test need not be made if there is no chance of having 
-                 * equal keys present in the file." (Knuth, Vol. 3, 125)
-                 */
-                if (b > bits)
-                    break;
-                /* If j < L, then all the bits examined were 1's.  If j == r, 
-                 * then all the bits examined were 0's.
-                 */
-                else if (j < L || j == r)
-                    continue;
-                /* If j == L, then only one bit examined was a 0, and this 0 
-                 * bit that was examined, could have been present in any key, 
-                 * not just the first.  All the other bits that were examined 
-                 * were 1's.
-                 */
-                else if (j == L) {
-                    L++;
-                    continue;
-                /* If all the bits examined are 0's, and there is only one
-                 * bit that is a 1, this clause will run, but notice that there
-                 * is no reason to put 'r' and 'b' on the stack because those
-                 * values will only represent a partition of size 1.
-                 */
-                } else {
-                    /* if '(r - j) <= m', there is no need to place it on the
-                     * stack because it will not be sorted any further using
-                     * the radix exchange method.
-                     */
-                    if (r - j > m) {
-                        stack[size++] = r;
-                        stack[size++] = b;
-                    }
-                    r = j;
-                }
-            }
+        for (i = 1; i < n; i++) {
+            if (data[i] > max)
+                max = data[i];
         }
-        if (0 == size && n > 1) {
-            insertionSort(data, 0, n);
-            break;
-        } else {
-            L = r + 1;
-            b = stack[--size];
-            r = stack[--size];
+        int bits = log10(max) / log10(2) + 1;
+        int stack[2 * (bits - 1)];
+
+        while (1) {
+            while (r - L > m) {
+
+                for (i = L; i < r && data[i] == data[i + 1]; i++)
+                    continue;
+
+                /* If this relational expression is true, then there are at 
+                 * least two different values for the keys in between 'L' and 
+                 * 'r'
+                 */
+                if (i < r) {
+                    i = L;
+                    j = r;
+
+                    do {
+                        /* text says to check the bit value before the 
+                         * 'i <= j' check 
+                         */ 
+
+                        /* Keep in mind that '-' has a higher precedence than 
+                         * '>>' or '<<'.  The operator precedence for the 7 
+                         * operators in this logical expression is;
+                         *
+                         * "[] % - >> <= == &&"
+                         *
+                         * from highest precedence on the left, to lowest
+                         * precedence on the right.  The operations are done 
+                         * in the following order, however;
+                         *
+                         * "<= [] - >> % == &&"
+                         *
+                         * with the first operation on the left, and the last
+                         * operation on the right.  Think about why this is.
+                         *
+                         * Therefore, the following expression uses the minimum
+                         * set of parentheses.  It would, however, be much 
+                         * easier to read if more parentheses were used so 
+                         * that one would not have to look up the operator 
+                         * precedence. In fact, you will get a compiler warning
+                         * saying that '-' has a higher precedence than '>>' 
+                         * and to used parentheses around the '-' operation to
+                         * silence the warning.
+                         */ 
+                        while (i <= j && (data[i] >> bits - b) % 2 == 0)
+                            i++;
+
+                        while (i <= j && (data[j] >> bits - b) % 2 == 1)
+                            j--;
+
+                        if (i < j) {
+                            temp = data[i];
+                            data[i] = data[j];
+                            data[j] = temp;
+                            i++;
+                            j--;
+                        } 
+                    } while (i <= j);
+                    
+                    b++;
+                    /* "This test need not be made if there is no chance of 
+                     * having equal keys present in the file." (Knuth, Vol. 3,
+                     * 125)
+                     */
+                    if (b > bits)
+                        break;
+                    /* If j < L, then all the bits examined were 1's.  If 
+                     * j == r, then all the bits examined were 0's.
+                     */
+                    else if (j < L || j == r)
+                        continue;
+                    /* If j == L, then only one bit examined was a 0, and this
+                     * 0 bit that was examined, could have been present in any
+                     * key, not just the first.  All the other bits that were 
+                     * examined were 1's.
+                     */
+                    else if (j == L) {
+                        L++;
+                        continue;
+                    /* If all the bits examined are 0's, and there is only one
+                     * bit that is a 1, this clause will run, but notice that 
+                     * there is no reason to put 'r' and 'b' on the stack 
+                     * because those values will only represent a partition 
+                     * of size 1.
+                     */
+                    } else {
+                        /* if '(r - j) <= m', there is no need to place it on 
+                         * the stack because it will not be sorted any further
+                         * using the radix exchange method.
+                         */
+                        if (r - j > m) {
+                            stack[size++] = r;
+                            stack[size++] = b;
+                        }
+                        r = j;
+                    }
+                } else
+                    break;
+            }
+            if (0 == size && n > 1) {
+                insertionSort(data, 0, n);
+                break;
+            } else {
+                L = r + 1;
+                b = stack[--size];
+                r = stack[--size];
+            }
         }
     }
 }
