@@ -937,14 +937,20 @@ void radixExchangeSort(int data[], int n) {
      * code is running on.  On this 2015 MacBook Pro, 'bits' would receive a 
      * value of 32.
      */
-    int bits = sizeof(int) * 8;
-    int stack[2 * (bits - 1)];
     int size = 0;
     int i, j, temp;
     /* 'm' is the threshold value for switching to insertion sort, as it was
      * for quick_sort() above.
      */
     int m = 9;
+    int max = data[0];
+
+    for (i = 1; i < n; i++) {
+        if (data[i] > max)
+            max = data[i];
+    }
+    int bits = log10(max) / log10(2) + 1;
+    int stack[2 * (bits - 1)];
 
     while (1) {
         while (r - L > m) {
@@ -989,9 +995,6 @@ void radixExchangeSort(int data[], int n) {
                      */ 
                     while (i <= j && (data[i] >> bits - b) % 2 == 0)
                         i++;
-
-                    if (i > j)
-                        break;
 
                     j--;
                     while (i <= j && (data[j + 1] >> bits - b) % 2 == 1)
