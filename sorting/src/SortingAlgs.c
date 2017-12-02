@@ -1052,7 +1052,7 @@ void radixExchangeSort(int data[], int n) {
                 } else
                     break;
             }
-            if (0 == size && n > 1) {
+            if (0 == size) {
                 insertionSort(data, 0, n);
                 break;
             } else {
