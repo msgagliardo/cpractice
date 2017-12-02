@@ -930,6 +930,9 @@ void quick_sort(int data[], int first, int n) {
 
 void radixExchangeSort(int data[], int n) {
     
+    /* If n = 1, there is no reason to allocate all this memory and run this
+     * procedure because the array is already sorted.
+     */
     if (n > 1) {
 
         int L = 0;
@@ -937,7 +940,16 @@ void radixExchangeSort(int data[], int n) {
         int b = 1;
         /* The number of bits in an 'int' for the C implementation that this 
          * code is running on.  On this 2015 MacBook Pro, 'bits' would receive
-         * a value of 32.
+         * a value of 32.  Right after these comments, I initially had the 
+         * following code;
+         *
+         * int bits = sizeof(int) * 8;
+         *
+         * I changed this, however, and added the code for 'bits' after the 
+         * for loop.  This was due to the fact that if the greatest number in
+         * the input 'data' only requires 10 bits to hold it (as in the case
+         * of Knuth's data) then you will go through 22 rounds of examining
+         * bits that are only 0.  These are unncessary examinations.
          */
         int size = 0;
         int i, j, temp;
@@ -947,10 +959,23 @@ void radixExchangeSort(int data[], int n) {
         int m = 9;
         int max = data[0];
 
+        /* The alternative to the code 'int bits = sizeof(int) * 8;' is the 
+         * following for loop which finds the max value in the array, and the 
+         * calculation of 'bits' from this max value.
+         *
+         * The drawback to this alternative is that you have to iterate 
+         * through each key in the array and compare it to the max key seen
+         * so far.  This necessarily takes O(n) time.  You are still saving
+         * time, however, because if you didn't do this, 'i' would iterate
+         * through the array 22 times before you would be able to make any
+         * exchanges (using Knuth's data). 
+         */
         for (i = 1; i < n; i++) {
             if (data[i] > max)
                 max = data[i];
         }
+        /* 
+         */
         int bits = log10(max) / log10(2) + 1;
         int stack[2 * (bits - 1)];
 
@@ -962,7 +987,13 @@ void radixExchangeSort(int data[], int n) {
 
                 /* If this relational expression is true, then there are at 
                  * least two different values for the keys in between 'L' and 
-                 * 'r'
+                 * 'r'.
+                 *
+                 * We don't want to sort a partition of all the same elements
+                 * using the radix exchange method because we would have to 
+                 * keep going through rounds of this inner while loop until
+                 * b > bits in order to 'sort' it.  It is much faster to let
+                 * insertion sort do this sorting.
                  */
                 if (i < r) {
                     i = L;
