@@ -365,59 +365,71 @@ void radixExchangeSort(int data[], int n) {
         int L = 0;
         int r = n - 1;
         int b = 1;
-        int m = sizeof(int) * 8;
-        int stack[2 * (m - 1)];
         int size = 0;
         int i, j, temp;
+        int m = 9;
+        
+        int max = data[0];
+        for (i = 1; i < n; i++) {
+            if (data[i] > max)
+                max = data[i];
+        }
+        int bits = log10(max) / log10(2) + 1;
+        int stack[2 * (bits - 1)];
+                
 
         while (1) {
-            while (L < r) {
-                i = L;
-                j = r;
+            while (r - L > m) {
 
-                do {
-                    while (i <= j && ((data[i] >> m - b) % 2 == 0))
-                        i++;
+                for (i = L; i < r && data[i] == data[i + 1]; i++)
+                    continue;
 
-                    if (i > j)
+                if (i < r) {
+                    i = L;
+                    j = r;
+
+                    do {
+
+                        while (i <= j && (data[i] >> bits - b) % 2 == 0)
+                            i++;
+
+                        while (i <= j && (data[j] >> bits - b) % 2 == 1)
+                            j--;
+
+                        if (i < j) {
+                            temp = data[i];
+                            data[i] = data[j];
+                            data[j] = temp;
+                            i++;
+                            j--;
+                        }
+                    } while (i <= j);
+
+                    b++;
+                    if (b > bits)
                         break;
-
-                    j--;
-                    while (i <= j && ((data[j + 1] >> m - b) % 2 == 1))
-                        j--;
-
-                    if (i <= j) {
-                        temp = data[i];
-                        data[i] = data[j + 1];
-                        data[j + 1] = temp;
-                        i++;
+                    else if (j < L || j == r)
+                        continue;
+                    else if (j == L) {
+                        L++;
+                        continue;
+                    } else {
+                        if (r - j > m) {
+                            stack[size++] = r;
+                            stack[size++] = b;
+                        }
+                        r = j;
                     }
-                } while (i <= j);
-
-                b++;
-                if (b > m)
+                } else
                     break;
-                else if (j < L || j == r)
-                    continue;
-                else if (j == L) {
-                    L++;
-                    continue;
-                } else {
-                    stack[size] = r;
-                    size++;
-                    stack[size] = b;
-                    size++;
-                    r = j;
-                }
             }
-            if (0 == size)
+            if (0 == size) {
+                insertionSort(data, 0, n);
                 break;
-            else {
+            } else {
                 L = r + 1;
-                size--;
-                b = stack[size];
-                size--;
-                r = stack[size];
+                b = stack[--size];
+                r = stack[--size];
             }
         }
     }
