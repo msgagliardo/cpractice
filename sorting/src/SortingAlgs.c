@@ -696,6 +696,7 @@ void natural_mergeSort(int data[], int n) {
             for (i = 0; i < n; i++)
                 data[i] = temp[i];
         }
+        free(temp);
     }
 }
 
