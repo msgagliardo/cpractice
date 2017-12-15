@@ -35,14 +35,64 @@ void bubbleDown(int A[], int root, int lastI) {
     }
 }
 
+void iBubbleDown(int A[], int root, int lastI, bool delete) {
+
+    if (delete == false) {
+        int child, rootValue;
+        rootValue = A[root];
+        child = 2 * root + 1;
+        while (child <= lastI) {
+            if (child < lastI && A[child + 1] > A[child])
+                child++;
+            if (rootValue < A[child]) {
+                A[root] = A[child];
+                root = child;
+                child = 2 * child + 1;
+            } else {
+                A[root] = rootValue;
+                break;
+            }
+        }
+        if (child > lastI)
+            A[root] = rootValue;
+    } else {
+        int child, parent;
+        parent = 0;
+        child = 2 * parent + 1;
+        while (child <= lastI) {
+            if (child < lastI && A[child + 1] > A[child])
+                child++;
+            A[parent] = A[child];
+            parent = child;
+            child = 2 * child + 1;
+        }
+        if (root <= A[parent])
+            A[parent] = root;
+        else {
+            child = parent;
+            parent = (parent - 1) / 2;
+            while (child > 0) {
+                if (root <= A[parent]) {
+                    A[child] = root;
+                    break;
+                }
+                A[child] = A[parent];
+                child = parent;
+                parent = (parent - 1) / 2;
+            }
+            if (child == 0)
+                A[child] = root;
+        }
+    }
+}
+
 void deletemax(int A[], int size) {
 
     if (size > 1) { 
-        int temp = A[0];
-        A[0] = A[(size - 1)];
-        A[(size - 1)] = temp;
+        int rootValue = A[(size - 1)];
+        A[(size - 1)] = A[0];
         size--;
-        bubbleDown(A, 0, size - 1);
+        iBubbleDown(A, rootValue, size - 1, true);
     }
 }
 
@@ -50,7 +100,7 @@ void heapifyDown(int A[], int lastI) {
 
     int i;
     for (i = (lastI - 1) / 2; i >= 0; i--)
-        bubbleDown(A, i, lastI);
+        iBubbleDown(A, i, lastI, false);
 }
 
 void heapSort(int A[], int size) {
