@@ -8,6 +8,7 @@ int A[MAX + 1];
 
 
 void bubbleUp(int A[], int lastI) {
+
     if (lastI > 0 && A[lastI] > A[(lastI - 1) / 2]) {
         int temp = A[lastI];
         A[lastI] = A[(lastI - 1) / 2];
@@ -17,12 +18,14 @@ void bubbleUp(int A[], int lastI) {
 }
 
 void insert(int A[], int x, int* size) {
+
     (*size)++;
     A[*size - 1] = x;
     bubbleUp(A, *size - 1);
 }
 
 void bubbleDown(int A[], int root, int lastI) {
+
     int child, temp;
     child = 2 * root + 1;
     if (child < lastI && A[child + 1] > A[child])

@@ -15,6 +15,7 @@ void bubbleSort(int data[], int first, int n);
 void mergeExchangeSort(int data[], int n);
 void merge(int data[], int first, int n1, int n2);
 void mergeSort(int data[], int first, int n);
+void natural_mergeSort(int data[], int n);
 int partition(int data[], int first, int n);
 void quickSort(int data[], int first, int n);
 void quick_sort(int data[], int first, int n);

@@ -207,6 +207,134 @@ void mergeSort(int data[], int first, int n) {
     }
 }
 
+void natural_mergeSort(int data[], int n) {
+
+    if (n > 1) {
+
+        int d, i, j, k, l, f, s, t;
+        int *temp;
+        s = 0;
+        temp = (int *) malloc(n * sizeof(*temp));
+
+        do {
+
+            d = 1;
+            i = 0;
+            k = 0;
+            j = n - 1;
+            l = n - 1;
+            f = 1;
+
+            if (s == 0) {
+
+                while (i != j) {
+                    if (data[i] > data[j]) {
+                        temp[k] = data[j];
+                        k += d;
+                        j--;
+                        if (data[j] >= data[j + 1])
+                            continue;
+                        else {
+                            temp[k] = data[i];
+                            k += d;
+                            i++;
+                            while (data[i - 1] <= data[i]) {
+                                temp[k] = data[i];
+                                k += d;
+                                i++;
+                            }
+                            f = 0;
+                            d = -d;
+                            t = k;
+                            k = l;
+                            l = t;
+                        }
+                    } else {
+                        temp[k] = data[i];
+                        k += d;
+                        i++;
+                        if (data[i - 1] <= data[i])
+                            continue;
+                        else {
+                            temp[k] = data[j];
+                            k += d;
+                            j--;
+                            while (data[j] >= data[j + 1]) {
+                                temp[k] = data[j];
+                                k += d;
+                                j--;
+                            }
+                            f = 0;
+                            d = -d;
+                            t = k;
+                            k = l;
+                            l = t;
+                        }
+                    }
+                }
+                temp[k] = data[i];
+            } else {
+
+                while (i != j) {
+                    if (temp[i] > temp[j]) {
+                        data[k] = temp[j];
+                        k += d;
+                        j--;
+                        if (temp[j] >= temp[j + 1])
+                            continue;
+                        else {
+                            data[k] = temp[i];
+                            k += d;
+                            i++;
+                            while (temp[i - 1] <= temp[i]) {
+                                data[k] = temp[i];
+                                k += d;
+                                i++;
+                            }
+                            f = 0;
+                            d = -d;
+                            t = k;
+                            k = l;
+                            l = t;
+                        }
+                    } else {
+                        data[k] = temp[i];
+                        k += d;
+                        i++;
+                        if (temp[i - 1] <= temp[i])
+                            continue;
+                        else {
+                            data[k] = temp[j];
+                            k += d;
+                            j--;
+                            while (temp[j] >= temp[j + 1]) {
+                                data[k] = temp[j];
+                                k += d;
+                                j--;
+                            }
+                            f = 0;
+                            d = -d;
+                            t = k;
+                            k = l;
+                            l = t;
+                        }
+                    }
+                }
+                data[k] = temp[i];
+            }
+            if (f == 0)
+                s = 1 - s;
+
+        } while (f == 0);
+        
+        if (s == 0) {
+            for (i = 0; i < n; i++)
+                data[i] = temp[i];
+        }
+        free(temp);
+    }
+}
+
 int partition(int data[], int first, int n) {
 
     int low = first + 1;

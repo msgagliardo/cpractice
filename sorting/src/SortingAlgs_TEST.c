@@ -124,27 +124,27 @@ int main(void) {
         free(links[i]);
 */
 
-    heapSort(knuth, 16);
+    natural_mergeSort(knuth, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
 
-    heapSort(knuth_sorted, 16);
+    natural_mergeSort(knuth_sorted, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth_sorted[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
 
-    heapSort(knuth_reversed, 16);
+    natural_mergeSort(knuth_reversed, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth_reversed[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
 
-    heapSort(knuth_same, 16);
+    natural_mergeSort(knuth_same, 16);
     for (i = 0; i < 16; i++)
         printf("%4d%s", knuth_same[i], (0 == (i + 1) % 20) ? "\n": "");
     printf("\n\n");
 
-    heapSort(knuth_one, 1);
+    natural_mergeSort(knuth_one, 1);
     printf("%4d\n", knuth_one[0]);
     printf("\n");
 
