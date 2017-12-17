@@ -38,9 +38,9 @@ void bubbleDown(int A[], int root, int lastI) {
     }
 }
 
-void iBubbleDown(int A[], int root, int lastI, bool delete) {
+void iBubbleDown(int A[], int root, int lastI, bool delmax) {
 
-    if (delete == false) {
+    if (delmax == false) {
         int child, rootValue;
         rootValue = A[root];
         child = 2 * root + 1;
