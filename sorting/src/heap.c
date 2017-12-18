@@ -77,8 +77,72 @@ void bubbleDown(int A[], int root, int lastI) {
         bubbleDown(A, child, lastI);
     }
 }
+
+/* Initially I was using a bubbleDown() function that was recursive, while 
+ * Knuth’s was iterative.  It was easy to convert to an iterative function 
+ * because the bubbleDown() function was tail recursive.  Also, one thing that 
+ * I was doing in my recursive bubbleDown() function that Knuth wasn’t doing 
+ * in the function described above, was swapping the last element with the 
+ * first, and then swapping the root element with the children that it was 
+ * less than.
+ *
+ * Knuth, on the other hand, saves the last element in a variable, copies the 
+ * old root to the last array position, and then compares the children with the
+ * saved value in the variable.  If the saved value is less than the greater 
+ * child, he simply copies the greater child over its parent.  This speeds up 
+ * the function by eliminating swaps throughout the reheapification process.
+ *
+ * The explanation of exercise 18 on how to speed up heapsort even more is 
+ * given on page 642.  In this modification, the saved key is not even 
+ * compared with the children during the bubble down process.  Knuth simply 
+ * copies the greater child over its parent until reaching the bottom of the 
+ * heap (a leaf node).  This eliminates the comparisons on the way down the 
+ * heap.  However, if the element’s correct position is not at this leaf node, 
+ * you must “siftup” the heap by setting the current parent index to the child,
+ * and setting the parent to the parent of this new child.  If the saved key is
+ * <= the parent key, or the child has index 0, the child will be set equal to 
+ * the saved element.  However, if the saved key is > the parent key, you must 
+ * set the child key equal to the parent key, and “siftup” the heap again.
+ *
+ * This may seem like you’re not saving any time, because you have to go back 
+ * up the heap if the saved key is not <= the leaf node.  However, you do 
+ * eliminate a considerable number of comparisons.  The reason for this, as 
+ * Knuth explains on page 642 is that 83.7% of the time, the node that you are
+ * bubbling down will end up as a leaf node.
+ *
+ * If you do this during the heap creation phase, this will not be the case 
+ * because the array is in random order, and it is less likely that the leaves 
+ * are low numbers.  However, when done on the 16 numbers given by Knuth, you 
+ * only make 8 comparisons as opposed to 13 if you use my original bubbleDown()
+ * function for heap creation.  Also, when used on the following 16 numbers, 9 
+ * comparisons are made if you use the “siftup” method, while my original 
+ * function makes 12 comparisons.  This is in line with C. J. H. McDiarmid and 
+ * B. A. Reed's assertion that 0.232N comparisons on the average are saved
+ * during the heap creation phase.  
+ *
+ * You will, however, end up making more assignments using the “siftup” method 
+ * if a key’s correct position is at a high node.  You will then end up making 
+ * unnecessary assignments as you go down the heap, assigning children records 
+ * to parent records, and then back up the heap assigning parent records to 
+ * children records.  You are, in effect, trading excess comparisons for excess
+ * assignments.  This is fine if comparisons take more machine level 
+ * instructions than assignments on a particular machine.  
+ *
+ * For this reason, I have NOT chosen to use the modificaton suggested in 
+ * exercise 18 for the heap creation phase.  Therefore, the 'heapifyDown()' 
+ * function passes a boolean argument of 'false' to the 'iBubbleDown()' 
+ * function.
+ */
 void iBubbleDown(int A[], int root, int lastI, bool delmax) {
 
+    /* When 'delmax' is false, the iBubbleDown function has been called by
+     * the 'heapifyDown()' function.  In this case, the 'root' parameter 
+     * equals the index that we start at.  However, when 'delmax' is true, 
+     * the iBubbleDown function has been called from the 'deletemax()' function.
+     * In the case, the root parameter equals the VALUE of the key of the new
+     * node that we are bubbling down (that is, it is equal to the key of the
+     * record that was at index 'size - 1').
+     */ 
     if (delmax == false) {
         int child, rootValue;
         rootValue = A[root];
@@ -148,6 +212,29 @@ void heapifyDown(int A[], int lastI) {
     for (i = (lastI - 1) / 2; i >= 0; i--)
         iBubbleDown(A, i, lastI, false);
 }
+
+/* Originally, this heapSort function was implemented according to the
+ * descriptions in the DS book and the FOCS book.  I have since updated to 
+ * conform to the description in Knuth's TAOCP, Vol 3., pg. 144.  That is,
+ * I've included an iterative bubbleDown() function (iBubbleDown()) to replace
+ * the recursive one.  
+ *
+ * The average running time of heapsort according to Knuth is 16NlgN + 0.01N.
+ * For small values of N, heapsort is slower than insertion sort and is even 
+ * slower than straight selection sort.  As N gets larger, heapsort will be 
+ * superior to shellsort, but its aymptotic running time of 16NlgN (23.08NlnN)
+ * will never beat quicksort's 8.09NlgN (11.67NlnN).  On the other hand, 
+ * quicksort is faster only on the average.  It has a worst-case running time
+ * of order N^2 whereas heapsort has a worst-case running time of 
+ * 18Nfloor(lgN) + 38N.  Heapsort and mergesort are the only algorithms that 
+ * guarantee O(NllogN) running time in the worst case.  Records are rearranged
+ * in place.
+ *
+ * Implementing the modifcation that Knuth suggests on pg. 642 exercise 18 will
+ * speed up the algorithm to have an average-case running time of 
+ * 13NlgN + O(N), which is still slower than quicksort's average case.
+ * Heapsort was discovered by J. W. J. Williams in 1964.
+ */
 void heapSort(int A[], int size) {
     /* You don't need an extra int variable.
      * You could just use size in place of i here.
